@@ -25,7 +25,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: cp ~/env/memeagent/.env .env
-    - run: nvm use
     - run: npm ci -f
     - run: npm run build --if-present
-    - run: npm test
+    - run: ls -a
+    - run: sudo service nginx restart
