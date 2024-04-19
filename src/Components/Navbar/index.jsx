@@ -257,7 +257,7 @@ function Navbar() {
 								className="btn btn-light nav-links"
 								onClick={closeMobileMenu}
 							>
-								<b>My Memes List</b>
+								<b>My Memes List - [test]</b>
 							</Link>
 						</li>
 						<li>
