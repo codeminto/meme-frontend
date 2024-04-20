@@ -146,7 +146,7 @@ function CreateContest() {
 		console.log("form data ========>>>>>", formData);
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-		const factoryContractAddress = "0xDE919C2c586015f93dbDa5c2852E6e84E58fe8D4";
+		const factoryContractAddress = import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS; //base sepolia
 		console.log("factoryContractAddress", factoryContractAddress);
 		const campaignFactory = new ethers.Contract(
 			factoryContractAddress,

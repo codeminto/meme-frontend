@@ -10,7 +10,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Loader from "./Components/Loader";
 import { LoaderProvider } from "./contexts/LoaderContext";
 // Replace this with any of the networks listed at https://viem.sh/docs/clients/chains.html
-import {arbitrumSepolia } from 'viem/chains';
+import {arbitrumSepolia, baseSepolia, morphSepolia } from 'viem/chains';
 // import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 // const client = new ApolloClient({
@@ -34,9 +34,9 @@ ReactDOM.render(
 						showWalletLoginFirst: false,
 					},
 					// Replace this with your desired default chain
-					defaultChain: arbitrumSepolia,
+					defaultChain: morphSepolia,
 					// Replace this with a list of your desired supported chains
-					supportedChains: [arbitrumSepolia],
+					supportedChains: [baseSepolia, arbitrumSepolia, morphSepolia],
 				}}
 				// onSuccess={ () => ( window.location.href = "/" )
 				onSuccess={() => console.log("login success")}
