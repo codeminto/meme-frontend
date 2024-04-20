@@ -33,12 +33,12 @@ function ContestList() {
 
 	fetchContests();
 
-		if (ready && !authenticated) {
-			window.location.href = "/login";
-		} else {
+		// if (ready && !authenticated) {
+		// 	window.location.href = "/login";
+		// } else {
 			
-		}
-	}, [ ready, authenticated ] );
+		// }
+	}, [ ] );
 	
 	const [ contests, setContests ] = useState( [] );
 	const calculateDaysRemaining = (startDate, endDate) => {
