@@ -27,7 +27,10 @@ function Contest() {
 	};
 
 	const [contest, setContest] = useState(null);
-	const [loading, setLoading] = useState(true);
+	const [ loading, setLoading ] = useState( true );
+	const [ submissions, setSubmissions ] = useState( [] );
+	const [submissionsContractAddress, setsubmissionsContractAddress] = useState([]);
+
 
 	useEffect(() => {
 		const fetchContest = async () => {
@@ -42,8 +45,24 @@ function Contest() {
 				setLoading(false);
 			}
 		};
+			const fetchSubmissions = async () => {
+				try {
+					const response1 = await axios.get(
+						`${import.meta.env.VITE_BACKEND_URL}/contest-submission`,
+					);
+					setSubmissions( response1.data );
+					setsubmissionsContractAddress(response1.data.contractAddress);
+					console.error(
+						"submissions contractAddress",
+						response1.data.contractAddress,
+					);
+				} catch (error) {
+					console.error("Error fetching submissions:", error);
+				}
+			};
 
 		fetchContest();
+		fetchSubmissions()
 	}, [id]); // Fetch data whenever the ID parameter changes
 
 	if (loading) {
@@ -177,153 +196,61 @@ function Contest() {
 
 				<div>
 					<h2 style={{ marginTop: "40px", marginBottom: "20px" }}>
-						Participants
+						Participants 1
 					</h2>
-
-					<GradientBorderCard>
-						<Link to={`/meme/${contest.id}`} key={contest.id}>
-							<div style={{ textAlign: "center" }}>
-								<img
-									style={{ textAlign: "center", borderRadius: "5px" }}
-									width={"100%"}
-									height={"250px"}
-									src={contest.imageUrl}
-									alt="meme"
-								/>
-							</div>
-						</Link>
-
-						<div style={{ textAlign: "center", fontSize: "12px" }}>
-							<h3>
-								{" "}
-								<b> {contest.title}</b>
-							</h3>
-
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									marginTop: "10px",
-									fontSize: "10px",
-									justifyContent: "space-around",
-								}}
+					{submissions.map((submission) => (
+						<GradientBorderCard>
+							<Link
+								to={`/contest-submission/${submission.submissionId}`}
+								key={submission.submissionId}
 							>
-								<a
-									style={{ width: "100%" }}
-									className="btn btn-primary highlight"
-								>
-									<b>
-										{" "}
-										Cast <i className="fas fa-share"></i>
-									</b>
-								</a>
-								<a
-									style={{ width: "100%", marginTop: "10px" }}
-									className="btn btn-primary highlight"
-								>
-									<b>
-										Upvote <i className="fas fa-arrow-up"></i>{" "}
-									</b>
-								</a>
-							</div>
-						</div>
-					</GradientBorderCard>
-					<GradientBorderCard>
-						<Link to={`/meme/${contest.id}`} key={contest.id}>
-							<div style={{ textAlign: "center" }}>
-								<img
-									style={{ textAlign: "center", borderRadius: "5px" }}
-									width={"100%"}
-									height={"250px"}
-									src={contest.imageUrl}
-									alt="meme"
-								/>
-							</div>
-						</Link>
+								<div style={{ textAlign: "center" }}>
+									<img
+										style={{ textAlign: "center", borderRadius: "5px" }}
+										width={"100%"}
+										height={"250px"}
+										src={submission.imageUrlOrHash}
+										alt="meme"
+									/>
+								</div>
+							</Link>
 
-						<div style={{ textAlign: "center", fontSize: "12px" }}>
-							<h3>
-								{" "}
-								<b> {contest.title}</b>
-							</h3>
+							<div style={{ textAlign: "center", fontSize: "12px" }}>
+								<h3>
+									{" "}
+									<b> {submission.description}</b>
+								</h3>
 
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									marginTop: "10px",
-									fontSize: "10px",
-									justifyContent: "space-around",
-								}}
-							>
-								<a
-									style={{ width: "100%" }}
-									className="btn btn-primary highlight"
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										marginTop: "10px",
+										fontSize: "10px",
+										justifyContent: "space-around",
+									}}
 								>
-									<b>
-										{" "}
-										Cast <i className="fas fa-share"></i>
-									</b>
-								</a>
-								<a
-									style={{ width: "100%", marginTop: "10px" }}
-									className="btn btn-primary highlight"
-								>
-									<b>
-										Upvote <i className="fas fa-arrow-up"></i>{" "}
-									</b>
-								</a>
+									<a
+										style={{ width: "100%" }}
+										className="btn btn-primary highlight"
+									>
+										<b>
+											{" "}
+											Cast <i className="fas fa-share"></i>
+										</b>
+									</a>
+									<a
+										style={{ width: "100%", marginTop: "10px" }}
+										className="btn btn-primary highlight"
+									>
+										<b>
+											Upvote <i className="fas fa-arrow-up"></i>{" "}
+										</b>
+									</a>
+								</div>
 							</div>
-						</div>
-					</GradientBorderCard>
-					<GradientBorderCard>
-						<Link to={`/meme/${contest.id}`} key={contest.id}>
-							<div style={{ textAlign: "center" }}>
-								<img
-									style={{ textAlign: "center", borderRadius: "5px" }}
-									width={"100%"}
-									height={"250px"}
-									src={contest.imageUrl}
-									alt="meme"
-								/>
-							</div>
-						</Link>
-
-						<div style={{ textAlign: "center", fontSize: "12px" }}>
-							<h3>
-								{" "}
-								<b> {contest.title}</b>
-							</h3>
-
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									marginTop: "10px",
-									fontSize: "10px",
-									justifyContent: "space-around",
-								}}
-							>
-								<a
-									style={{ width: "100%" }}
-									className="btn btn-primary highlight"
-								>
-									<b>
-										{" "}
-										Cast <i className="fas fa-share"></i>
-									</b>
-								</a>
-								<a
-									style={{ width: "100%", marginTop: "10px" }}
-									className="btn btn-primary highlight"
-								>
-									<b>
-										Upvote <i className="fas fa-arrow-up"></i>{" "}
-									</b>
-								</a>
-							</div>
-						</div>
-					</GradientBorderCard>
+						</GradientBorderCard>
+					))}
 				</div>
 
 				<div style={{ margin: "10px" }} className="contest-details"></div>

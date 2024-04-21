@@ -201,14 +201,14 @@ export default function Create() {
 						imagelink: imagelink,
 					});
 
-					await writeTable({
-						user_address: user?.wallet?.address,
-						f_id: user?.wallet?.address,
-						title: formData.title,
-						tags: "fruits,mango",
-						uri: imagelink,
-						uri_type: "pinta",
-					});
+					// await writeTable({
+					// 	user_address: user?.wallet?.address,
+					// 	f_id: user?.wallet?.address,
+					// 	title: formData.title,
+					// 	tags: "fruits,mango",
+					// 	uri: imagelink,
+					// 	uri_type: "pinta",
+					// });
 
 					const chainId = wallet?.chainId?.split(":")[1];
 					const userAddress = user.wallet?.address;
