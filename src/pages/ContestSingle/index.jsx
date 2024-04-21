@@ -9,6 +9,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import GradientBorderCard from "../../Components/GradientBorderCard .jsx";
 import CampaignAbi from "../../abi/Campaign.json";
+import { providers } from "ethers";
+import { ethers } from "ethers";
 
 const boxStyle = {
 	width: "70%",
@@ -73,11 +75,10 @@ function Contest() {
 		return <div>Contest not found</div>;
 	}
 
-	const upvoteContractCall = async (contestContractAddress, submissionId) => {
+	const upvoteContractCall = async (submissionId) => {
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-
-		const campaignContractAddress = contest.campaignAddress;
+		const campaignContractAddress = submissionsContractAddress || contest.campaignAddress;
 		const campaign = new ethers.Contract(
 			campaignContractAddress,
 			CampaignAbi,
@@ -85,17 +86,16 @@ function Contest() {
 		);
 		try {
 			const result = await campaign.upvoteSubmission(signer, submissionId);
-			console.log("Method call result:", result);
+			console.log("UpVote Method call result:", result);
 		} catch (error) {
 			console.error("Error calling method:", error);
 		}
 	};
 
-	const calculateWinnersContractCall = async (contestContractAddress) => {
+	const calculateWinnersContractCall = async () => {
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-
-		const campaignContractAddress = contest.campaignAddress;
+		const campaignContractAddress = submissionsContractAddress || contest.campaignAddress;
 		const campaign = new ethers.Contract(
 			campaignContractAddress,
 			CampaignAbi,
@@ -242,6 +242,7 @@ function Contest() {
 									<a
 										style={{ width: "100%", marginTop: "10px" }}
 										className="btn btn-primary highlight"
+										onClick={()=>upvoteContractCall(submission.submissionId)}
 									>
 										<b>
 											Upvote <i className="fas fa-arrow-up"></i>{" "}
