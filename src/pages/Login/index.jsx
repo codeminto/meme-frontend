@@ -22,12 +22,12 @@ export default function Login() {
 
 	const { readTable, writeTable, createTable } = useTableland();
 
-	// useEffect(() => {
-	// 	if (ready && authenticated) {
-	// 		window.location.href = "/";
-	// 	} else {
-	// 	}
-	// }, [ready, authenticated]);
+	useEffect(() => {
+		if (ready && authenticated) {
+			window.location.href = "/";
+		} else {
+		}
+	}, [ready, authenticated]);
 
 	const CreateTable = async (res) => {
 
@@ -89,12 +89,12 @@ export default function Login() {
 					Log in {"  "}
 					<i className="fas fa-arrow-right"></i>
 				</a>
-				<br />
+				{/* <br />
 				<br />
 				<a className="btn btn-tertiary" onClick={CreateTable}>
 					Create Your account in TableLand and start {"  "}
 					<i className="fas fa-arrow-right"></i>
-				</a>
+				</a> */}
 			</header>
 		</Container>
 	);

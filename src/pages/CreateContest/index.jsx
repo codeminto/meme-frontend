@@ -146,8 +146,8 @@ function CreateContest() {
 		console.log("form data ========>>>>>", formData);
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-		const factoryContractAddress = import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS; //base sepolia
-		console.log("factoryContractAddress", factoryContractAddress);
+		const factoryContractAddress = import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS;
+		console.log( "factoryContractAddress", factoryContractAddress );
 		const campaignFactory = new ethers.Contract(
 			factoryContractAddress,
 			CampaignFactoryAbi,
@@ -285,7 +285,7 @@ function CreateContest() {
 								}
 								placeholder=""
 								required
-								style={{ textAlign: "right", width: "300px" }}
+								style={{ width: "300px" }}
 							/>
 						</div>
 						<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -302,7 +302,7 @@ function CreateContest() {
 								}
 								placeholder=""
 								required
-								style={{ textAlign: "right", width: "300px" }}
+								style={{ width: "300px" }}
 							/>
 						</div>
 						<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -374,6 +374,25 @@ function CreateContest() {
 								required
 								style={{ textAlign: "right", width: "300px" }}
 							/>
+						</div>
+						<div style={{ display: "flex", justifyContent: "space-between" }}>
+							<label htmlFor="amount" style={{ textAlign: "left" }}>
+								Result Type :
+							</label>
+							<select
+								className="text btn btn-light"
+								type="select"
+								id="amount"
+								// name="amount"
+								// value={formData.amount}
+								// placeholder=""
+								// required
+								style={{  width: "300px" }}
+							>
+								<option value="Public VOting">Public Voting</option>
+								<option value="Admin">Admin</option>
+								<option value="Chainlink Random">Chainlink Random</option>
+							</select>
 						</div>
 						<br />
 						<br />

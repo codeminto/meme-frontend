@@ -11,6 +11,7 @@ import GradientBorderCard from "../../Components/GradientBorderCard .jsx";
 import CampaignAbi from "../../abi/Campaign.json";
 import { providers } from "ethers";
 import { ethers } from "ethers";
+import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 const boxStyle = {
 	width: "70%",
@@ -22,7 +23,11 @@ const boxStyle = {
 };
 function Contest() {
 	const { id } = useParams(); // Get the ID parameter from the URL
-
+		const { ready, authenticated, user, logout } = usePrivy();
+	const { wallets } = useWallets();
+	const wallet = wallets[0];
+const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
+const userAddress = user ? user.wallet?.address : null;
 	const fadeTop = {
 		hidden: { opacity: 0, y: -30 },
 		visible: { opacity: 1, y: 0 },
@@ -53,11 +58,7 @@ function Contest() {
 						`${import.meta.env.VITE_BACKEND_URL}/contest-submission`,
 					);
 					setSubmissions( response1.data );
-					setsubmissionsContractAddress(response1.data.contractAddress);
-					console.error(
-						"submissions contractAddress",
-						response1.data.contractAddress,
-					);
+			
 				} catch (error) {
 					console.error("Error fetching submissions:", error);
 				}
@@ -75,18 +76,23 @@ function Contest() {
 		return <div>Contest not found</div>;
 	}
 
-	const upvoteContractCall = async (submissionId) => {
+	const upvoteContractCall = async (submissionId, contractAddress) => {
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-		const campaignContractAddress = submissionsContractAddress || contest.campaignAddress;
+		const campaignContractAddress = contractAddress || contest.campaignAddress;
 		const campaign = new ethers.Contract(
 			campaignContractAddress,
 			CampaignAbi,
 			signer,
 		);
+		console.log("signer =>>>>>>>", signer);
+		console.log("contest campaign addresss =>>>>>>>", contest.campaignAddress);
+		console.log("campaign submissionId =>>>>>>>", submissionId);
 		try {
-			const result = await campaign.upvoteSubmission(signer, submissionId);
-			console.log("UpVote Method call result:", result);
+			const result = await campaign.upvoteSubmission(userAddress, submissionId);
+			console.log( "UpVote Method call result:", result );
+			toast.success("You have voted successful..!");
+
 		} catch (error) {
 			console.error("Error calling method:", error);
 		}
@@ -154,13 +160,15 @@ function Contest() {
 					<div>
 						<div style={{ marginTop: "10px" }}>
 							<h2>Schedule</h2>
-
 							<p style={{ marginTop: "10px" }}>
-								<b> Started At : </b> {contest.startedAt}
+								<b>Started At:</b>{" "}
+								{new Date(parseInt(contest.startedAt)).toLocaleString()}
 							</p>
 							<p>
-								<b>Ended At : </b> {contest.endedAt}
+								<b>Started At:</b>{" "}
+								{new Date(parseInt(contest.endedAt)).toLocaleString()}
 							</p>
+							
 						</div>
 						<div style={{ marginTop: "20px" }}>
 							<Link to={`/participate/${contest._id}`} key={contest._id}>
@@ -242,7 +250,12 @@ function Contest() {
 									<a
 										style={{ width: "100%", marginTop: "10px" }}
 										className="btn btn-primary highlight"
-										onClick={()=>upvoteContractCall(submission.submissionId)}
+										onClick={() =>
+											upvoteContractCall(
+												submission.submissionId,
+												submission.contractAddress,
+											)
+										}
 									>
 										<b>
 											Upvote <i className="fas fa-arrow-up"></i>{" "}
