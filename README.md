@@ -13,7 +13,7 @@ Deploying contracts on Arbitrum involves leveraging its layer 2 scaling solution
 
 ## Filecoin Integration
 #### Store data with Tableland seamlessly integrates with various features of the Memester platform, including meme creation tools, competition platforms, and voting systems. This integration ensures that data flows smoothly between different components of the platform, enabling a cohesive user experience.
-### Integration while login  [File](https://github.com/codeminto/memeAgent/blob/main/client/src/pages/Login/index.jsx)
+### Integration while login  [File](https://github.com/codeminto/meme-frontend/blob/main/src/pages/Login/index.jsx)
 
 	const CreateTable = async (res) => {
 
@@ -33,7 +33,7 @@ Deploying contracts on Arbitrum involves leveraging its layer 2 scaling solution
 		}
 	};
 
- ### Integration while submitting meme and participation [File](https://github.com/codeminto/memeAgent/blob/main/client/src/contexts/Tableland.jsx)
+ ### Integration while submitting meme and participation [File](https://github.com/codeminto/meme-frontend/blob/main/client/src/contexts/Tableland.jsx)
 
 ![each meme will stored in taleland](https://github.com/codeminto/memeAgent/assets/16322269/e933598e-5333-463c-8c0d-4d132416de23)
 
