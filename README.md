@@ -4,8 +4,8 @@
 Deploying contracts on Arbitrum involves leveraging its layer 2 scaling solution built on Ethereum, which enables faster and more cost-effective transactions while maintaining compatibility with Ethereum's ecosystem. 
 
 ### Smart Contracts : 
-#### [CampaignFactory.sol](https://github.com/LearnWeb3-Hackathon/contract-memster/blob/main/contracts/CampaignFactory.sol)
-#### [Campaign.sol](https://github.com/LearnWeb3-Hackathon/contract-memster/blob/main/contracts/Campaign.sol)
+#### [CampaignFactory.sol](https://github.com/codeminto/contract-memeagent/blob/main/contracts/CampaignFactory.sol)
+#### [Campaign.sol](https://github.com/codeminto/contract-memeagent/blob/main/contracts/Campaign.sol)
 
 ### Contract Address : [0xDE919C2c586015f93dbDa5c2852E6e84E58fe8D4](https://sepolia.arbiscan.io/address/0xDE919C2c586015f93dbDa5c2852E6e84E58fe8D4)
 
