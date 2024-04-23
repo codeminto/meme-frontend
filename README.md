@@ -1,13 +1,11 @@
 ## Memester
 
-## Arbitrum
-Deploying contracts on Arbitrum involves leveraging its layer 2 scaling solution built on Ethereum, which enables faster and more cost-effective transactions while maintaining compatibility with Ethereum's ecosystem. 
+## MorphL2
+Memester, powered by MorphL2, revolutionizes meme creation and sharing by leveraging the scalability and security features of MorphL2's Layer 2 solution. Users can now create, share, and engage with memes seamlessly on the blockchain, enjoying faster transaction speeds and reduced costs. With MorphL2 integration, Memester enhances the user experience while maintaining the integrity and decentralization of the platform.
 
 ### Smart Contracts : 
 #### [CampaignFactory.sol](https://github.com/codeminto/contract-memeagent/blob/main/contracts/CampaignFactory.sol)
 #### [Campaign.sol](https://github.com/codeminto/contract-memeagent/blob/main/contracts/Campaign.sol)
-
-#### Arbitrum Contract Address : [0xDE919C2c586015f93dbDa5c2852E6e84E58fe8D4](https://sepolia.arbiscan.io/address/0xDE919C2c586015f93dbDa5c2852E6e84E58fe8D4)
 
 ## MorphL2
 #### MorphL2 Contract Address : [0x51D1c4117fcb34358D0Da8E54C6F11028391e4db](https://explorer-testnet.morphl2.io/address/0x51D1c4117fcb34358D0Da8E54C6F11028391e4db)
