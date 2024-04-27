@@ -134,10 +134,10 @@ function CreateContest() {
 	}
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setLoader({ loading: true, type: 'default' })
 		if (checkFormValidations()) {
 			return
 		}
+		setLoader({ loading: true, type: 'default' })
 		try {
 			const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 			const userAddress = user ? user.wallet?.address : null;
