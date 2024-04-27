@@ -27,6 +27,7 @@ function CreateContest() {
 	// const { ready, authenticated, user } = usePrivy();
 	const { wallets } = useWallets();
 	const wallet = wallets[0]; // Replace this with your desired wallet
+	const [errorMsg, setErrorMsg] = useState("")
 	const [formData, setFormData] = useState({
 		imageUrl: "",
 		networkId: "",
@@ -47,9 +48,8 @@ function CreateContest() {
 	const handleImageChange = async (e) => {
 		const file = e.target.files[0];
 		const hash = await uploadToPinata(file);
-		const imagelink = `https://${
-			import.meta.env.VITE_GATEWAY_URL
-		}/ipfs/${hash}`;
+		const imagelink = `https://${import.meta.env.VITE_GATEWAY_URL
+			}/ipfs/${hash}`;
 		console.log("imagelink is", imagelink);
 
 		// Update formData with imagelink
@@ -106,16 +106,41 @@ function CreateContest() {
 			setLoader({ loading: false, type: "default" });
 		}
 	};
+	const checkFormValidations = () => {
+		setErrorMsg("")
+		let flag = false
+		if (!formData?.imageUrl?.length) {
+			setErrorMsg("Upload Image is required!")
+			flag = true;
+		}
+		if (!formData?.endedAt?.length) {
+			setErrorMsg("Ended at is required!")
+			flag = true;
+		}
+		if (!formData?.startedAt?.length) {
+			setErrorMsg("Started at is required!")
+			flag = true;
+		}
+		if (!formData?.description?.length) {
+			setErrorMsg("Description is required!")
+			flag = true;
+		}
+		if (!formData?.title?.length) {
+			setErrorMsg("Title is required!")
+			flag = true;
+		}
 
+		return flag;
+	}
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		//setLoader({ loading: true, type: 'default' })
+		setLoader({ loading: true, type: 'default' })
+		if (checkFormValidations()) {
+			return
+		}
 		try {
 			const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 			const userAddress = user ? user.wallet?.address : null;
-			console.log("wallet addreess", userAddress);
-			console.log("network id", networkID);
-			console.log("...formData", formData);
 			setFormData({
 				...formData,
 				networkId: networkID,
@@ -124,8 +149,7 @@ function CreateContest() {
 			console.log("FORM_DATA ", formData);
 			const contractAddress = await createCampaignContractCall(formData);
 
-			console.log( "contractAddress", contractAddress );
-			toast.success("Contest created successful..!");
+			toast.success("Contest created successfully!");
 			// const response = await axios.post(
 			// 	`${import.meta.env.VITE_FRAME_URL}/api/contest`,
 			// 	{
@@ -137,6 +161,7 @@ function CreateContest() {
 			// console.log(response.data); // handle success response
 		} catch (error) {
 			console.error("Error creating contest:", error);
+			toast.error("Contest creation failed, try again!");
 		} finally {
 			setLoader({ loading: false, type: "default" });
 		}
@@ -147,7 +172,7 @@ function CreateContest() {
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
 		const factoryContractAddress = import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS;
-		console.log( "factoryContractAddress", factoryContractAddress );
+		console.log("factoryContractAddress", factoryContractAddress);
 		const campaignFactory = new ethers.Contract(
 			factoryContractAddress,
 			CampaignFactoryAbi,
@@ -207,7 +232,6 @@ function CreateContest() {
 						flexDirection: "row",
 						justifyContent: "space-around",
 					}}
-					onSubmit={handleSubmit}
 				>
 					<div>
 						<div
@@ -387,17 +411,15 @@ function CreateContest() {
 								// value={formData.amount}
 								// placeholder=""
 								// required
-								style={{  width: "300px" }}
+								style={{ width: "300px" }}
 							>
 								<option value="Public VOting">Public Voting</option>
 								<option value="Admin">Admin</option>
 								<option value="Chainlink Random">Chainlink Random</option>
 							</select>
 						</div>
-						<br />
-						<br />
-						<br />
-						<button className="btn btn-primary" type="submit">
+						<div style={{ marginTop: "1rem", marginBottom: '1rem', color: 'red', fontWeight: 'bold' }}>{errorMsg}</div>
+						<button className={`btn btn-primary`} onClick={handleSubmit}>
 							<b> Submit</b>
 						</button>
 					</div>

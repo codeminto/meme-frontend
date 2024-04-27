@@ -184,6 +184,16 @@ button {
 	transition: 0.3s ease-in-out;
 }
 
+.btn-disable {
+	background: var(--dark-grey);
+	color: var(--bg-light);
+	font-weight: 500;
+}
+
+.btn-disable:hover {
+	cursor: not-allowed;
+}
+
 .btn-primary {
 	background: var(--primary-color);
 	color: var(--bg-dark);

@@ -7,8 +7,10 @@ import { usePrivy, useWallets } from "@privy-io/react-auth";
 import "./ImageListPage.css";
 import GradientBorderCard from "../../Components/GradientBorderCard .jsx";
 import { useParams } from "react-router-dom"; // Import useParams hook
+import { useLoader } from "../../contexts/LoaderContext.jsx";
+import NoDataFound from "../../Components/NoDataFound.jsx";
 
- 
+
 
 function MyContestList() {
 	const fadeTop = {
@@ -17,7 +19,7 @@ function MyContestList() {
 	};
 
 	let { id } = useParams(); // Get the ID parameter from the URL
-
+	const { setLoader } = useLoader();
 	const { wallets } = useWallets();
 	const wallet = wallets[0]; // Replace this with your desired wallet
 
@@ -27,12 +29,15 @@ function MyContestList() {
 	useEffect(() => {
 		const fetchContests = async () => {
 			try {
+				setLoader({ loading: true, type: 'default' })
 				const response = await axios.get(
 					`${import.meta.env.VITE_FRAME_URL}/api/contest/my-contest/${id}`,
 				);
 				setContests(response.data);
 			} catch (error) {
 				console.error("Error fetching my contests =========>>>>>>>>>", error);
+			} finally {
+				setLoader({ loading: false, type: 'default' })
 			}
 		};
 
@@ -118,7 +123,8 @@ function MyContestList() {
 					<h2 className="">My Contests</h2>
 				</motion.div>
 			</Header>
-			<div style={boxStyle}>
+			{!(!!contests?.length) && <NoDataFound />}
+			{(!!contests?.length) && (<div style={boxStyle}>
 				{contests.map((contest) => (
 					<GradientBorderCard>
 						<Link to={`/contest/${contest._id}`} key={contest._id}>
@@ -182,7 +188,7 @@ function MyContestList() {
 						</div>
 					</GradientBorderCard>
 				))}
-			</div>
+			</div>)}
 		</Container>
 	);
 }
