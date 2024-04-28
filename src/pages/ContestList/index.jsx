@@ -24,7 +24,7 @@ function ContestList() {
 	useEffect(() => {
 		const fetchContests = async () => {
 			try {
-				setLoader({ loading: true, type: 'default' })
+				// setLoader({ loading: true, type: 'default' })
 				const response = await axios.get(
 					`${import.meta.env.VITE_FRAME_URL}/api/contest`,
 				);
