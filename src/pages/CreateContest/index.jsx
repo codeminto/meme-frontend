@@ -24,9 +24,13 @@ function CreateContest() {
 		visible: { opacity: 1, y: 0 },
 	};
 	const { setLoader } = useLoader();
-	// const { ready, authenticated, user } = usePrivy();
 	const { wallets } = useWallets();
 	const wallet = wallets[0]; // Replace this with your desired wallet
+	// const { ready, authenticated, user } = usePrivy();
+	
+	const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
+	const userAddress = user ? user.wallet?.address : null;
+
 	const [formData, setFormData] = useState({
 		imageUrl: "",
 		networkId: "",
@@ -111,8 +115,6 @@ function CreateContest() {
 		e.preventDefault();
 		//setLoader({ loading: true, type: 'default' })
 		try {
-			const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
-			const userAddress = user ? user.wallet?.address : null;
 			console.log("wallet addreess", userAddress);
 			console.log("network id", networkID);
 			console.log("...formData", formData);
@@ -124,7 +126,7 @@ function CreateContest() {
 			console.log("FORM_DATA ", formData);
 			const contractAddress = await createCampaignContractCall(formData);
 
-			console.log( "contractAddress", contractAddress );
+			console.log("contractAddress", contractAddress);
 			toast.success("Contest created successful..!");
 			// const response = await axios.post(
 			// 	`${import.meta.env.VITE_FRAME_URL}/api/contest`,
@@ -146,30 +148,59 @@ function CreateContest() {
 		console.log("form data ========>>>>>", formData);
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-		const factoryContractAddress = import.meta.env.VITE_FACTORY_CONTRACT_ADDRESS;
-		console.log( "factoryContractAddress", factoryContractAddress );
+		const factoryContractAddress = import.meta.env
+			.VITE_FACTORY_CONTRACT_ADDRESS;
+		console.log("factoryContractAddress", factoryContractAddress);
 		const campaignFactory = new ethers.Contract(
 			factoryContractAddress,
 			CampaignFactoryAbi,
 			signer,
 		);
 		console.log(campaignFactory, "campaignFactory");
+		// try {
+		// 	const _startedAt = new Date(formData?.startedAt).getTime();
+		// 	const _endedAt = new Date(formData?.endedAt).getTime();
+		// 	const etherAmount = ethers.utils.parseEther(formData?.amount);
+		// 	console.log(_startedAt, _endedAt);
+		// 	const result = await campaignFactory.createCampaign(
+		// 		formData?.imageUrl,
+		// 		formData?.title,
+		// 		formData?.description,
+		// 		_startedAt,
+		// 		_endedAt,
+		// 		formData?.participantCounts,
+		// 		"Public",
+		// 		etherAmount,
+		// 		formData?.winnerCounts,
+		// 	);
+		// 	console.log("Method call result:", result);
+		// 	return result;
+		// } catch (error) {
+		// 	console.error("Error calling method:", error);
+		// }
+
 		try {
 			const _startedAt = new Date(formData?.startedAt).getTime();
 			const _endedAt = new Date(formData?.endedAt).getTime();
 			const etherAmount = ethers.utils.parseEther(formData?.amount);
-			console.log(_startedAt, _endedAt);
-			const result = await campaignFactory.createCampaign(
-				formData?.imageUrl,
-				formData?.title,
-				formData?.description,
-				_startedAt,
-				_endedAt,
-				formData?.participantCounts,
-				"Public",
-				etherAmount,
-				formData?.winnerCounts,
-			);
+
+			const initParam = {
+				_imageUrl: formData?.imageUrl,
+				_title: formData?.title,
+				_description: formData?.description,
+				_startDate: _startedAt,
+				_endDate: _endedAt,
+				_maxParticipants: formData?.participantCounts,
+				_judgingType: "Public",
+				_totalPrizeAmount: etherAmount.toString(),
+				_totalWinners: formData?.winnerCounts,
+				initOwner: userAddress,
+				_factoryContractAddress: factoryContractAddress,
+			};
+
+			const jsonData = JSON.stringify(initParam);
+			console.log("initParam ===>>>>>>", initParam);
+			const result = await campaignFactory.createCampaign(initParam);
 			console.log("Method call result:", result);
 			return result;
 		} catch (error) {
@@ -387,7 +418,7 @@ function CreateContest() {
 								// value={formData.amount}
 								// placeholder=""
 								// required
-								style={{  width: "300px" }}
+								style={{ width: "300px" }}
 							>
 								<option value="Public VOting">Public Voting</option>
 								<option value="Admin">Admin</option>

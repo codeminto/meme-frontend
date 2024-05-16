@@ -10,13 +10,32 @@ import toast, { Toaster } from 'react-hot-toast';
 import Loader from "./Components/Loader";
 import { LoaderProvider } from "./contexts/LoaderContext";
 // Replace this with any of the networks listed at https://viem.sh/docs/clients/chains.html
-import {arbitrumSepolia, baseSepolia, morphSepolia } from 'viem/chains';
+import { opBNBTestnet, bscTestnet } from 'viem/chains';
 // import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 // const client = new ApolloClient({
 // 	uri: import.meta.env.VITE_GRAPHQL_CLIENT,
 // 	cache: new InMemoryCache(),
 // });
+
+const ScrollSepolia = {
+	id: 534351,
+	name: "Scroll Sepolia Testnet",
+	nativeCurrency: { name: "Ether", symbol: "ETH", decimals: 18 },
+	rpcUrls: {
+		default: {
+			http: ["https://scroll-sepolia.blockpi.network/v1/rpc/public"],
+		},
+	},
+	blockExplorers: {
+		default: {
+			name: "Scroll Sepolia Testnet",
+			url: "https://sepolia.scrollscan.dev",
+			apiUrl: "https://sepolia.scrollscan.dev/api",
+		},
+	},
+	testnet: true,
+};
 
 ReactDOM.render(
 	<React.StrictMode>
@@ -34,9 +53,12 @@ ReactDOM.render(
 						showWalletLoginFirst: false,
 					},
 					// Replace this with your desired default chain
-					defaultChain: morphSepolia,
+					defaultChain: opBNBTestnet,
 					// Replace this with a list of your desired supported chains
-					supportedChains: [baseSepolia, arbitrumSepolia, morphSepolia],
+					supportedChains: [
+						opBNBTestnet,
+						bscTestnet
+					],
 				}}
 				// onSuccess={ () => ( window.location.href = "/" )
 				onSuccess={() => console.log("login success")}

@@ -162,6 +162,7 @@ function ContestList() {
 							>
 								<i className="fas fa-clock"></i>{" "}
 								{calculateDaysRemaining(contest.startedAt, contest.endedAt)}days{" "}
+								
 							</p>
 							<a
 								style={{
