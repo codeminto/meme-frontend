@@ -7,10 +7,12 @@ import { usePrivy } from "@privy-io/react-auth";
 import "./ImageListPage.css";
 import API_URLS from "../../config.js";
 import GradientBorderCard from "../../Components/GradientBorderCard .jsx";
- 
+import { useLoader } from "../../contexts/LoaderContext.jsx";
+import NoDataFound from "../../Components/NoDataFound.jsx";
+
 
 function ContestList() {
-	
+
 
 	const fadeTop = {
 		hidden: { opacity: 0, y: -30 },
@@ -18,29 +20,32 @@ function ContestList() {
 	};
 
 	const { ready, authenticated, user, logout } = usePrivy();
-
+	const { setLoader } = useLoader()
 	useEffect(() => {
-	const fetchContests = async () => {
-		try {
-			const response = await axios.get(
-				`${import.meta.env.VITE_FRAME_URL}/api/contest`,
-			);
-			setContests(response.data);
-		} catch (error) {
-			console.error("Error fetching contests:", error);
-		}
-	};
+		const fetchContests = async () => {
+			try {
+				// setLoader({ loading: true, type: 'default' })
+				const response = await axios.get(
+					`${import.meta.env.VITE_FRAME_URL}/api/contest`,
+				);
+				setContests(response.data);
+			} catch (error) {
+				console.error("Error fetching contests:", error);
+			} finally {
+				setLoader({ loading: false, type: 'default' })
+			}
+		};
 
-	fetchContests();
+		fetchContests();
 
 		// if (ready && !authenticated) {
 		// 	window.location.href = "/login";
 		// } else {
-			
+
 		// }
-	}, [ ] );
-	
-	const [ contests, setContests ] = useState( [] );
+	}, []);
+
+	const [contests, setContests] = useState([]);
 	const calculateDaysRemaining = (startDate, endDate) => {
 		const start = new Date(startDate);
 		const end = new Date(endDate);
@@ -49,15 +54,15 @@ function ContestList() {
 		return differenceInDays;
 	};
 
-	 const getStatus = (startDate, endDate) => {
-			const daysRemaining = calculateDaysRemaining(startDate, endDate);
-			if (daysRemaining <= 0) {
-				return "Expired";
-			} else {
-				return "Ongoing";
-			}
-		};
-	
+	const getStatus = (startDate, endDate) => {
+		const daysRemaining = calculateDaysRemaining(startDate, endDate);
+		if (daysRemaining <= 0) {
+			return "Expired";
+		} else {
+			return "Ongoing";
+		}
+	};
+
 	const boxStyle = {
 		width: "70%",
 		margin: "0 auto",
@@ -67,39 +72,39 @@ function ContestList() {
 		backgroundColor: "#ffffff",
 	};
 
-	 const cardStyle = {
-			border: "2px solid transparent",
-			padding: "20px",
-			borderRadius: "10px",
-			backgroundColor: "white",
-			backgroundClip: "padding-box",
-			position: "relative",
-			margin: "20px",
-		};
+	const cardStyle = {
+		border: "2px solid transparent",
+		padding: "20px",
+		borderRadius: "10px",
+		backgroundColor: "white",
+		backgroundClip: "padding-box",
+		position: "relative",
+		margin: "20px",
+	};
 
-		const gradientBorderStyle = {
-			content: '""',
-			position: "absolute",
-			top: "-5px",
-			left: "-5px",
-			right: "-5px",
-			bottom: "-5px",
-			zIndex: "-1",
-			background: "linear-gradient(45deg, #ffd700, #ffff00)",
-			borderRadius: "12px",
-		};
+	const gradientBorderStyle = {
+		content: '""',
+		position: "absolute",
+		top: "-5px",
+		left: "-5px",
+		right: "-5px",
+		bottom: "-5px",
+		zIndex: "-1",
+		background: "linear-gradient(45deg, #ffd700, #ffff00)",
+		borderRadius: "12px",
+	};
 
-		const gradientBorderStyleInner = {
-			content: '""',
-			position: "absolute",
-			top: "-3px",
-			left: "-3px",
-			right: "-3px",
-			bottom: "-3px",
-			zIndex: "-1",
-			background: "linear-gradient(45deg, #ffd700, #ffff00)",
-			borderRadius: "12px",
-		};
+	const gradientBorderStyleInner = {
+		content: '""',
+		position: "absolute",
+		top: "-3px",
+		left: "-3px",
+		right: "-3px",
+		bottom: "-3px",
+		zIndex: "-1",
+		background: "linear-gradient(45deg, #ffd700, #ffff00)",
+		borderRadius: "12px",
+	};
 
 
 	return (
@@ -122,37 +127,39 @@ function ContestList() {
 					/> */}
 				</motion.div>
 			</Header>
-			<div style={boxStyle}>
-				{contests.map((contest) => (
-					<GradientBorderCard>
-						<Link to={`/contest/${contest._id}`} key={contest._id}>
-							<div style={{ textAlign: "center" }}>
-								<img
-									style={{
-										textAlign: "center",
-										borderRadius: "10px",
-										objectFit: "contain",
-									}}
-									width={"100%"}
-									src={contest.imageUrl}
-									alt="Contest"
-								/>
-							</div>
-						</Link>
-
-						<div style={{ textAlign: "center", margin: "10px" }}>
+			{!(!!contests?.length) && <NoDataFound />}
+			{(!!contests?.length) && (
+				<div style={boxStyle}>
+					{contests.map((contest) => (
+						<GradientBorderCard>
 							<Link to={`/contest/${contest._id}`} key={contest._id}>
-								<h1>{contest.title}</h1>
+								<div style={{ textAlign: "center" }}>
+									<img
+										style={{
+											textAlign: "center",
+											borderRadius: "10px",
+											objectFit: "contain",
+										}}
+										width={"100%"}
+										src={contest.imageUrl}
+										alt="Contest"
+									/>
+								</div>
 							</Link>
-							<p
-								style={{
-									marginTop: "5px",
-									fontSize: "14px",
-								}}
-							>
-								{contest.description}
-							</p>
-							{/* <p>Start Date: {contest.startedAt}</p>
+
+							<div style={{ textAlign: "center", margin: "10px" }}>
+								<Link to={`/contest/${contest._id}`} key={contest._id}>
+									<h1>{contest.title}</h1>
+								</Link>
+								<p
+									style={{
+										marginTop: "5px",
+										fontSize: "14px",
+									}}
+								>
+									{contest.description}
+								</p>
+								{/* <p>Start Date: {contest.startedAt}</p>
 											<p>End Date: {contest.endedAt}</p> */}
 							<p
 								style={{
@@ -162,36 +169,35 @@ function ContestList() {
 							>
 								<i className="fas fa-clock"></i>{" "}
 								{calculateDaysRemaining(contest.startedAt, contest.endedAt)}days{" "}
-								
 							</p>
 							<a
 								style={{
 									marginTop: "5px",
 									fontSize: "8px",
 
-									backgroundColor: "green",
-									color: "white",
-									borderRadius: "20px",
-									padding: "8px",
-								}}
-								className="btn btn-primary highlight"
-							>
-								{getStatus(contest.startedAt, contest.endedAt)}
-							</a>
-							<br />
-
-							<Link to={`/participate/${contest._id}`} key={contest._id}>
-								<a
-									style={{ marginTop: "10px" }}
+										backgroundColor: "green",
+										color: "white",
+										borderRadius: "20px",
+										padding: "8px",
+									}}
 									className="btn btn-primary highlight"
 								>
-									Participate
+									{getStatus(contest.startedAt, contest.endedAt)}
 								</a>
-							</Link>
-						</div>
-					</GradientBorderCard>
-				))}
-			</div>
+								<br />
+
+								<Link to={`/participate/${contest._id}`} key={contest._id}>
+									<a
+										style={{ marginTop: "10px" }}
+										className="btn btn-primary highlight"
+									>
+										Participate
+									</a>
+								</Link>
+							</div>
+						</GradientBorderCard>
+					))}
+				</div>)}
 		</Container>
 	);
 }

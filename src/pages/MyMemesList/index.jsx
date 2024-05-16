@@ -8,13 +8,14 @@ import "./ImageListPage.css";
 import API_URLS from "../../config.js";
 import { useTableland } from "../../contexts/Tableland";
 import GradientBorderCard from "../../Components/GradientBorderCard .jsx";
-
+import { useLoader } from "../../contexts/LoaderContext.jsx";
+import NoDataFound from "../../Components/NoDataFound.jsx";
 
 function MyMemesList() {
 	const [memes, setMemes] = useState([]);
-	const [ loading, setLoading ] = useState( true );
+	const [loading, setLoading] = useState(true);
 	const { readTable } = useTableland();
-
+	const { setLoader } = useLoader()
 
 	const fadeTop = {
 		hidden: { opacity: 0, y: -30 },
@@ -26,8 +27,9 @@ function MyMemesList() {
 	useEffect(() => {
 		const fetchMemes = async () => {
 			try {
+				setLoader({ loading: true, type: 'default' })
 				// const response = await axios.get( `${ API_URLS.development }/meme` );
-				
+
 				const result = await readTable();
 				console.log("res", result);
 				setMemes(result);
@@ -38,6 +40,8 @@ function MyMemesList() {
 			} catch (error) {
 				console.error("Error fetching memes:", error);
 				setLoading(false);
+			} finally {
+				setLoader({ loading: false, type: 'default' })
 			}
 		};
 
@@ -71,11 +75,12 @@ function MyMemesList() {
 					animate="visible"
 					transition={{ duration: 0.6 }}
 				>
-					<h1 className="">Meme List</h1>
-					
+					<h1 className="" style={{ marginTop: '1rem' }}>Meme List</h1>
+
 				</motion.div>
 			</Header>
-			<div style={boxStyle} className="rounded-box">
+			{!(!!memes?.length) && <NoDataFound />}
+			{!!memes?.length && (<div style={boxStyle} className="rounded-box">
 				{memes.map((meme) => (
 					<GradientBorderCard>
 						<Link to={`/meme/${meme.f_id}`} key={meme.f_id}>
@@ -149,7 +154,7 @@ function MyMemesList() {
 					// 	</button>
 					// </ div>
 				))}
-			</div>
+			</div>)}
 		</Container>
 	);
 }

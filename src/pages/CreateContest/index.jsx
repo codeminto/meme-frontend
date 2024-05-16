@@ -51,9 +51,8 @@ function CreateContest() {
 	const handleImageChange = async (e) => {
 		const file = e.target.files[0];
 		const hash = await uploadToPinata(file);
-		const imagelink = `https://${
-			import.meta.env.VITE_GATEWAY_URL
-		}/ipfs/${hash}`;
+		const imagelink = `https://${import.meta.env.VITE_GATEWAY_URL
+			}/ipfs/${hash}`;
 		console.log("imagelink is", imagelink);
 
 		// Update formData with imagelink
@@ -110,10 +109,38 @@ function CreateContest() {
 			setLoader({ loading: false, type: "default" });
 		}
 	};
+	const checkFormValidations = () => {
+		setErrorMsg("")
+		let flag = false
+		if (!formData?.imageUrl?.length) {
+			setErrorMsg("Upload Image is required!")
+			flag = true;
+		}
+		if (!formData?.endedAt?.length) {
+			setErrorMsg("Ended at is required!")
+			flag = true;
+		}
+		if (!formData?.startedAt?.length) {
+			setErrorMsg("Started at is required!")
+			flag = true;
+		}
+		if (!formData?.description?.length) {
+			setErrorMsg("Description is required!")
+			flag = true;
+		}
+		if (!formData?.title?.length) {
+			setErrorMsg("Title is required!")
+			flag = true;
+		}
 
+		return flag;
+	}
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		//setLoader({ loading: true, type: 'default' })
+		if (checkFormValidations()) {
+			return
+		}
+		setLoader({ loading: true, type: 'default' })
 		try {
 			console.log("wallet addreess", userAddress);
 			console.log("network id", networkID);
@@ -139,6 +166,7 @@ function CreateContest() {
 			// console.log(response.data); // handle success response
 		} catch (error) {
 			console.error("Error creating contest:", error);
+			toast.error("Contest creation failed, try again!");
 		} finally {
 			setLoader({ loading: false, type: "default" });
 		}
@@ -238,7 +266,6 @@ function CreateContest() {
 						flexDirection: "row",
 						justifyContent: "space-around",
 					}}
-					onSubmit={handleSubmit}
 				>
 					<div>
 						<div
@@ -425,10 +452,8 @@ function CreateContest() {
 								<option value="Chainlink Random">Chainlink Random</option>
 							</select>
 						</div>
-						<br />
-						<br />
-						<br />
-						<button className="btn btn-primary" type="submit">
+						<div style={{ marginTop: "1rem", marginBottom: '1rem', color: 'red', fontWeight: 'bold' }}>{errorMsg}</div>
+						<button className={`btn btn-primary`} onClick={handleSubmit}>
 							<b> Submit</b>
 						</button>
 					</div>
