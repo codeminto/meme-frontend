@@ -12,6 +12,7 @@ import { useLoader } from "../../contexts/LoaderContext.jsx";
 
 function CreateContest() {
 	const { ready, authenticated, user, logout } = usePrivy();
+	const [errorMsg, setErrorMsg] = useState()
 
 	useEffect(() => {
 		if (ready && !authenticated) {
@@ -185,27 +186,6 @@ function CreateContest() {
 			signer,
 		);
 		console.log(campaignFactory, "campaignFactory");
-		// try {
-		// 	const _startedAt = new Date(formData?.startedAt).getTime();
-		// 	const _endedAt = new Date(formData?.endedAt).getTime();
-		// 	const etherAmount = ethers.utils.parseEther(formData?.amount);
-		// 	console.log(_startedAt, _endedAt);
-		// 	const result = await campaignFactory.createCampaign(
-		// 		formData?.imageUrl,
-		// 		formData?.title,
-		// 		formData?.description,
-		// 		_startedAt,
-		// 		_endedAt,
-		// 		formData?.participantCounts,
-		// 		"Public",
-		// 		etherAmount,
-		// 		formData?.winnerCounts,
-		// 	);
-		// 	console.log("Method call result:", result);
-		// 	return result;
-		// } catch (error) {
-		// 	console.error("Error calling method:", error);
-		// }
 
 		try {
 			const _startedAt = new Date(formData?.startedAt).getTime();
@@ -226,9 +206,8 @@ function CreateContest() {
 				_factoryContractAddress: factoryContractAddress,
 			};
 
-			const jsonData = JSON.stringify(initParam);
 			console.log("initParam ===>>>>>>", initParam);
-			const result = await campaignFactory.createCampaign(initParam);
+			const result = await campaignFactory.createCampaign(initParam,{value: etherAmount.toString()});
 			console.log("Method call result:", result);
 			return result;
 		} catch (error) {
@@ -441,10 +420,6 @@ function CreateContest() {
 								className="text btn btn-light"
 								type="select"
 								id="amount"
-								// name="amount"
-								// value={formData.amount}
-								// placeholder=""
-								// required
 								style={{ width: "300px" }}
 							>
 								<option value="Public VOting">Public Voting</option>

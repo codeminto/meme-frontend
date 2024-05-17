@@ -156,7 +156,7 @@
 		],
 		"name": "createCampaign",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -234,6 +234,52 @@
 			}
 		],
 		"name": "logUpvoted",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "winningSubmissions",
+				"type": "address[]"
+			},
+			{
+				"internalType": "address",
+				"name": "contractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "amount",
+				"type": "uint256[]"
+			}
+		],
+		"name": "logWinnerAnnounced",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "winner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "contractAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "logWinnerClaimed",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -393,6 +439,56 @@
 		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": false,
+				"internalType": "address[]",
+				"name": "winningSubmissions",
+				"type": "address[]"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "contractAddress",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256[]",
+				"name": "payout",
+				"type": "uint256[]"
+			}
+		],
+		"name": "WinnerAnnounced",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "winner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "contractAddress",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "WinnerClaimed",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
 				"components": [
 					{
 						"internalType": "string",
@@ -434,6 +530,10 @@
 		],
 		"name": "WinnersCalculated",
 		"type": "event"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "fallback"
 	},
 	{
 		"stateMutability": "payable",

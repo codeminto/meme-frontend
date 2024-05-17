@@ -27,7 +27,10 @@ function Contest() {
 	const { wallets } = useWallets();
 	const wallet = wallets[0];
 const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
-const userAddress = user ? user.wallet?.address : null;
+	const userAddress = user ? user.wallet?.address : null;
+	
+	const [ winnersArray, setWinnersArray ] = useState([])
+	const [payOut, setPayout]= useState ([])
 	const fadeTop = {
 		hidden: { opacity: 0, y: -30 },
 		visible: { opacity: 1, y: 0 },
@@ -58,6 +61,7 @@ const userAddress = user ? user.wallet?.address : null;
 						`${import.meta.env.VITE_BACKEND_URL}/contest-submission`,
 					);
 					setSubmissions( response1.data );
+					console.log("submission =====>>>>", response1)
 			
 				} catch (error) {
 					console.error("Error fetching submissions:", error);
@@ -98,22 +102,60 @@ const userAddress = user ? user.wallet?.address : null;
 		}
 	};
 
-	const calculateWinnersContractCall = async () => {
+	const claimCall = async (submissionId, contractAddress) => {
+		
+		try {
+			const result = await campaign.claim();
+			console.log("UpVote Method call result:", result);
+			toast.success("You have voted successful..!");
+		} catch (error) {
+			console.error("Error calling method:", error);
+		}
+	};
+	const selectWinnersContractCall = async () =>
+	{
+		
+		const payoutAmount = ethers.utils.parseEther(payOut.toString()).toString();
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
-		const campaignContractAddress = submissionsContractAddress || contest.campaignAddress;
+		const campaignContractAddress = contest.campaignAddress;
+		console.log("campaing address===>>>>>>>",campaignContractAddress)
 		const campaign = new ethers.Contract(
 			campaignContractAddress,
 			CampaignAbi,
 			signer,
 		);
-		try {
-			const result = await campaign.calculateWinners();
+		try
+		{
+
+			console.log( "winner array ===>>>>>>> ", winnersArray );
+			console.log("winner payot===>>>>>>> ", [payoutAmount.toString()]);
+			const result = await campaign.selectWinners(winnersArray, [
+				payoutAmount.toString(),
+			])
 			console.log("Method call result:", result);
 		} catch (error) {
 			console.error("Error calling method:", error);
 		}
 	};
+
+	// const calculateWinnersContractCall = async () => {
+	// 	const provider = new providers.Web3Provider(window.ethereum);
+	// 	const signer = provider.getSigner();
+	// 	const campaignContractAddress =
+	// 		submissionsContractAddress || contest.campaignAddress;
+	// 	const campaign = new ethers.Contract(
+	// 		campaignContractAddress,
+	// 		CampaignAbi,
+	// 		signer,
+	// 	);
+	// 	try {
+	// 		const result = await campaign.calculateWinners();
+	// 		console.log("Method call result:", result);
+	// 	} catch (error) {
+	// 		console.error("Error calling method:", error);
+	// 	}
+	// };
 
 	return (
 		<Container>
@@ -168,7 +210,6 @@ const userAddress = user ? user.wallet?.address : null;
 								<b>Started At:</b>{" "}
 								{new Date(parseInt(contest.endedAt)).toLocaleString()}
 							</p>
-							
 						</div>
 						<div style={{ marginTop: "20px" }}>
 							<Link to={`/participate/${contest._id}`} key={contest._id}>
@@ -198,13 +239,36 @@ const userAddress = user ? user.wallet?.address : null;
 							>
 								Claim Price
 							</button>
+							<input
+								placeholder="type submission id saperate by comma"
+								type="text"
+								onChange={(e) => setWinnersArray(e.target.value.split(","))}
+							/>
+							<br />
+							<input
+								placeholder="type payout saperate by comma"
+								type="text"
+								onChange={(e) => setPayout(e.target.value.split(","))}
+							/>
+							<button
+								style={{
+									marginTop: "20px",
+									width: "100%",
+									background: "#FFD960",
+									color: "black",
+								}}
+								onClick={selectWinnersContractCall}
+								className="btn btn-primary"
+							>
+								Anounce Winner
+							</button>
 						</div>
 					</div>
 				</div>
 
 				<div>
 					<h2 style={{ marginTop: "40px", marginBottom: "20px" }}>
-						Participants 1
+						Participants
 					</h2>
 					{submissions.map((submission) => (
 						<GradientBorderCard>
@@ -227,6 +291,8 @@ const userAddress = user ? user.wallet?.address : null;
 								<h3>
 									{" "}
 									<b> {submission.description}</b>
+									<br />
+									<b>Submission ID : {submission.submissionId}</b>
 								</h3>
 
 								<div
