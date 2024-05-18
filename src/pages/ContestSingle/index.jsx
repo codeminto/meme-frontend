@@ -39,6 +39,7 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 	const [contest, setContest] = useState(null);
 	const [ loading, setLoading ] = useState( true );
 	const [ submissions, setSubmissions ] = useState( [] );
+	const [winners, setWinners]= useState([])
 	const [submissionsContractAddress, setsubmissionsContractAddress] = useState([]);
 
 
@@ -60,14 +61,26 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 					const response1 = await axios.get(
 						`${import.meta.env.VITE_BACKEND_URL}/contest-submission`,
 					);
-					setSubmissions( response1.data );
-					console.log("submission =====>>>>", response1)
-			
+					setSubmissions(response1.data);
+					console.log("submission =====>>>>", response1);
 				} catch (error) {
 					console.error("Error fetching submissions:", error);
 				}
-			};
+		};
+		
+		const fetchWinners = async () => {
+			try {
+				const response1 = await axios.get(
+					`${import.meta.env.VITE_BACKEND_URL}/winners-announced/`,
+				);
+				setWinners(response1.data);
+				console.log("submission =====>>>>", response1);
+			} catch (error) {
+				console.error("Error fetching winners:", error);
+			}
+		};
 
+		fetchWinners()
 		fetchContest();
 		fetchSubmissions()
 	}, [id]); // Fetch data whenever the ID parameter changes
@@ -102,12 +115,26 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 		}
 	};
 
-	const claimCall = async (submissionId, contractAddress) => {
-		
+	const claimCall = async () => {
 		try {
+			const provider = new providers.Web3Provider(window.ethereum);
+			const signer = provider.getSigner();
+			const campaignContractAddress = contest.campaignAddress;
+
+			const campaign = new ethers.Contract(
+				campaignContractAddress,
+				CampaignAbi,
+				signer,
+			);
+			console.log("signer =>>>>>>>", signer);
+			console.log(
+				"contest campaign addresss =>>>>>>>",
+				contest.campaignAddress,
+			);
+
 			const result = await campaign.claim();
-			console.log("UpVote Method call result:", result);
-			toast.success("You have voted successful..!");
+			console.log("claim Method call result:", result);
+			toast.success("You have claimed successfuly..!");
 		} catch (error) {
 			console.error("Error calling method:", error);
 		}
@@ -219,15 +246,12 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 								<b> Cast Now</b>
 							</button>
 							<h2 style={{ marginTop: "20px" }}>Winners</h2>
-							<p style={{ marginTop: "10px" }}>
-								<b>1st : </b>0x20613aB...c8697
-							</p>
-							<p>
-								<b>2nd : </b>0x20613aB...c8697
-							</p>
-							<p>
-								<b>3rd : </b>0x20613aB...c8697
-							</p>
+							{winners.map((winner) => (
+								<p style={{ marginTop: "10px" }}>
+									<b>1st : </b> {winner.winningSubmissions}
+								</p>
+							))}
+							
 							<button
 								style={{
 									marginTop: "20px",
@@ -236,6 +260,7 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 									color: "white",
 								}}
 								className="btn btn-light"
+								onClick={claimCall}
 							>
 								Claim Price
 							</button>
