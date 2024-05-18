@@ -317,7 +317,7 @@ function Navbar() {
 					) : (
 						<Link to={`/login`} onClick={closeMobileMenu}>
 							<a className="btn btn-primary highlight">
-								<b> Login</b>
+								<b> SignIn</b>
 							</a>
 						</Link>
 					)}
