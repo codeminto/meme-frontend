@@ -21,12 +21,19 @@ const boxStyle = {
 	padding: "20px",
 	backgroundColor: "#ffffff",
 };
-function Contest() {
+function Contest ()
+{
+	
+	const [contest, setContest] = useState(null);
+	const [submissions, setSubmissions] = useState([]);
+	const [winners, setWinners] = useState([]);
+	const [ campaignContractAddress, setCampaignContractAddress ] = useState( [] );
+	
 	const { id } = useParams(); // Get the ID parameter from the URL
 		const { ready, authenticated, user, logout } = usePrivy();
 	const { wallets } = useWallets();
 	const wallet = wallets[0];
-const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
+	const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 	const userAddress = user ? user.wallet?.address : null;
 	
 	const [ winnersArray, setWinnersArray ] = useState([])
@@ -36,58 +43,129 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 		visible: { opacity: 1, y: 0 },
 	};
 
-	const [contest, setContest] = useState(null);
-	const [ loading, setLoading ] = useState( true );
-	const [ submissions, setSubmissions ] = useState( [] );
-	const [winners, setWinners]= useState([])
-	const [submissionsContractAddress, setsubmissionsContractAddress] = useState([]);
 
+useEffect(() => {
+	const fetchContest = async () => {
+		try {
+			const response = await axios.get(
+				`${import.meta.env.VITE_FRAME_URL}/api/contest/${id}`,
+			);
+			setContest(response.data);
+			setCampaignContractAddress(response.data.campaignAddress);
+			console.log(
+				"contest campaign address ======>>>>>>>>>",
+				response.data.campaignAddress,
+			);
+		} catch (error) {
+			console.error("Error fetching contest:", error);
+		}
+	};
 
-	useEffect(() => {
-		const fetchContest = async () => {
-			try {
-				const response = await axios.get(
-					`${import.meta.env.VITE_FRAME_URL}/api/contest/${id}`,
-				);
-				setContest(response.data);
-				setLoading(false);
-			} catch (error) {
-				console.error("Error fetching contest:", error);
-				setLoading(false);
-			}
-		};
-			const fetchSubmissions = async () => {
-				try {
-					const response1 = await axios.get(
-						`${import.meta.env.VITE_BACKEND_URL}/contest-submission`,
-					);
-					setSubmissions(response1.data);
-					console.log("submission =====>>>>", response1);
-				} catch (error) {
-					console.error("Error fetching submissions:", error);
-				}
-		};
-		
-		const fetchWinners = async () => {
-			try {
-				const response1 = await axios.get(
-					`${import.meta.env.VITE_BACKEND_URL}/winners-announced/`,
-				);
-				setWinners(response1.data);
-				console.log("submission =====>>>>", response1);
-			} catch (error) {
-				console.error("Error fetching winners:", error);
-			}
-		};
+	fetchContest();
+}, [id]); // Fetch contest data when the ID parameter changes
 
-		fetchWinners()
-		fetchContest();
-		fetchSubmissions()
-	}, [id]); // Fetch data whenever the ID parameter changes
+useEffect(() => {
+	const fetchSubmissions = async () => {
+		if (!campaignContractAddress) return; // Avoid fetching if the address is not set yet
 
-	if (loading) {
-		return <div>Loading...</div>;
+		try {
+			console.log("from fetch submission", campaignContractAddress);
+
+			const response1 = await axios.get(
+				`${
+					import.meta.env.VITE_BACKEND_URL
+				}/contest-submission/${campaignContractAddress}`,
+			);
+			setSubmissions(response1.data);
+			console.log("submission data =====>>>>", response1.data);
+		} catch (error) {
+			console.error("Error fetching submissions:", error);
+		}
+	};
+
+	const fetchWinners = async () => {
+		if (!campaignContractAddress) return; // Avoid fetching if the address is not set yet
+
+		try {
+			const response2 = await axios.get(
+				`${
+					import.meta.env.VITE_BACKEND_URL
+				}/winners-announced/${campaignContractAddress}`,
+			);
+			console.log("winners fetched: ", response2.data);
+			setWinners(response2.data);
+		} catch (error) {
+			console.error("Error fetching winners:", error);
+		}
+	};
+
+	if (campaignContractAddress) {
+		fetchSubmissions();
+		fetchWinners();
 	}
+}, [campaignContractAddress]);
+
+	// useEffect(() => {
+	// 	const fetchContest = async () => {
+	// 		try {
+	// 			const response = await axios.get(
+	// 				`${import.meta.env.VITE_FRAME_URL}/api/contest/${id}`,
+	// 			);
+	// 			setContest( response.data );
+				
+	// 			setCampaignContractAddress(response.data.campaignAddress);
+	// 			console.log(
+	// 				"contest campaign address ======>>>>>>>>>",
+	// 				response.data.campaignAddress,
+	// 			);
+	// 		} catch (error) {
+	// 			console.error("Error fetching contest:", error);
+			
+	// 		}
+	// 	};
+
+
+	// 	const fetchSubmissions = async () => {
+	// 			try
+	// 			{
+	// 				console.log(
+	// 					"from fetch submission",
+	// 					campaignContractAddress,
+	// 				);
+
+	// 				const response1 = await axios.get(
+	// 					`${
+	// 						import.meta.env.VITE_BACKEND_URL
+	// 					}/contest-submission/${campaignContractAddress}`,
+	// 				);
+	// 				 setSubmissions( response1.data );
+	// 				console.log("submission data =====>>>>", response1.data);
+	// 			} catch (error) {
+	// 				console.error("Error fetching submissions:", error);
+	// 			}
+	// 	};
+		
+	// 	const fetchWinners = async () => {
+	// 		try {
+	// 			const response2 = await axios.get(
+	// 				`${
+	// 					import.meta.env.VITE_BACKEND_URL
+	// 				}/winners-announced/${campaignContractAddress}`,
+	// 			);
+	// 			setWinners(response2.data);
+	// 			console.log("submission =====>>>>", response2);
+	// 		} catch (error) {
+	// 			console.error("Error fetching winners:", error);
+	// 		}
+	// 	};
+
+		
+	// 	fetchContest();
+	// 	fetchSubmissions()
+	// 	fetchWinners();
+	// }, [id]); // Fetch data whenever the ID parameter changes
+
+
 
 	if (!contest) {
 		return <div>Contest not found</div>;
@@ -219,10 +297,10 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 						<p style={{ textAlign: "justify" }}>
 							<b> Description : </b>
 							{contest.description}
-							In publishing and graphic design, Lorem ipsum is a placeholder
-							text commonly used to demonstrate the visual form of a document or
-							a typeface without relying on meaningful content. Lorem ipsum may
-							be used as a placeholder before the final copy is available.
+							In publishing and graphic design, a placeholder text commonly used
+							to demonstrate the visual form of a document or a typeface without
+							relying on meaningful content. may be used as a placeholder before
+							the final copy is available.
 						</p>
 					</div>
 					<hr style={{ color: "yellow" }} />
@@ -246,11 +324,21 @@ const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 								<b> Cast Now</b>
 							</button>
 							<h2 style={{ marginTop: "20px" }}>Winners</h2>
-							{winners.map((winner) => (
+							{/* {winners.map((winner) => (
 								<p style={{ marginTop: "10px" }}>
 									<b>1st : </b> {winner.winningSubmissions}
 								</p>
 							))}
+							 */}
+							{Array.isArray(winners) && winners.length > 0 ? (
+								winners.map((winner, index) => (
+									<p key={index} style={{ marginTop: "10px" }}>
+										<b>{index + 1} : </b> {winner.winningSubmissions}
+									</p>
+								))
+							) : (
+								<p>No winners announced yet</p>
+							)}
 							
 							<button
 								style={{
