@@ -9,11 +9,6 @@ Memester, powered by MorphL2, revolutionizes meme creation and sharing by levera
 
 #### MorphL2 Contract Address : [0x51D1c4117fcb34358D0Da8E54C6F11028391e4db](https://explorer-testnet.morphl2.io/address/0x51D1c4117fcb34358D0Da8E54C6F11028391e4db)
 
-
-
-
-
-
 ## Filecoin Integration
 #### Store data with Tableland seamlessly integrates with various features of the Memester platform, including meme creation tools, competition platforms, and voting systems. This integration ensures that data flows smoothly between different components of the platform, enabling a cohesive user experience.
 ### Integration while login  [File](https://github.com/codeminto/meme-frontend/blob/main/src/pages/Login/index.jsx)
