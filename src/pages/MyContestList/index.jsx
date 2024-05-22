@@ -151,7 +151,7 @@ function MyContestList() {
 								{contest.description}
 							</p>
 							{/* <p>Start Date: {contest.startedAt}</p>
-											<p>End Date: {contest.endedAt}</p> */}
+								<p>End Date: {contest.endedAt}</p> */}
 							<p
 								style={{
 									marginTop: "5px",

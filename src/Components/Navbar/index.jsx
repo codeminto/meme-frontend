@@ -242,24 +242,7 @@ function Navbar() {
 								<b>Home</b>
 							</Link>
 						</li>
-						<li>
-							<Link
-								to={`/create-meme`}
-								className="btn btn-light nav-links"
-								onClick={closeMobileMenu}
-							>
-								<b>Create Meme</b>
-							</Link>
-						</li>
-						<li>
-							<Link
-								to={`/mymemes`}
-								className="btn btn-light nav-links"
-								onClick={closeMobileMenu}
-							>
-								<b>My Memes List</b>
-							</Link>
-						</li>
+
 						<li>
 							<span className="btn btn-light nav-links" onClick={toggleSubMenu}>
 								<b>Contest </b>
@@ -294,6 +277,26 @@ function Navbar() {
 								</SubMenu>
 							)}
 						</li>
+
+						<li>
+							<Link
+								to={`/create-meme`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>Create Meme</b>
+							</Link>
+						</li>
+						<li>
+							<Link
+								to={`/mymemes`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>My Memes List</b>
+							</Link>
+						</li>
+						
 					</ul>
 					{ready && authenticated ? (
 						<a

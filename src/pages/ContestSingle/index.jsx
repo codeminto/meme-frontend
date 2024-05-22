@@ -14,96 +14,97 @@ import { ethers } from "ethers";
 import { usePrivy, useWallets } from "@privy-io/react-auth";
 
 const boxStyle = {
-	width: "70%",
+	width: "60%",
 	margin: "0 auto",
 	borderRadius: "10px",
 	boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
 	padding: "20px",
 	backgroundColor: "#ffffff",
+	marginTop:"24px"
+	// display : "flex",
+	// flexDirection: "column",
+	// justifyContent: "center"
 };
-function Contest ()
-{
-	
+function Contest() {
+
 	const [contest, setContest] = useState(null);
 	const [submissions, setSubmissions] = useState([]);
 	const [winners, setWinners] = useState([]);
-	const [ campaignContractAddress, setCampaignContractAddress ] = useState( [] );
-	
+	const [campaignContractAddress, setCampaignContractAddress] = useState([]);
+
 	const { id } = useParams(); // Get the ID parameter from the URL
-		const { ready, authenticated, user, logout } = usePrivy();
+	const { ready, authenticated, user, logout } = usePrivy();
 	const { wallets } = useWallets();
 	const wallet = wallets[0];
 	const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 	const userAddress = user ? user.wallet?.address : null;
-	
-	const [ winnersArray, setWinnersArray ] = useState([])
-	const [payOut, setPayout]= useState ([])
+
+	const [winnersArray, setWinnersArray] = useState([])
+	const [payOut, setPayout] = useState([])
 	const fadeTop = {
 		hidden: { opacity: 0, y: -30 },
 		visible: { opacity: 1, y: 0 },
 	};
 
 
-useEffect(() => {
-	const fetchContest = async () => {
-		try {
-			const response = await axios.get(
-				`${import.meta.env.VITE_FRAME_URL}/api/contest/${id}`,
-			);
-			setContest(response.data);
-			setCampaignContractAddress(response.data.campaignAddress);
-			console.log(
-				"contest campaign address ======>>>>>>>>>",
-				response.data.campaignAddress,
-			);
-		} catch (error) {
-			console.error("Error fetching contest:", error);
+	useEffect(() => {
+		const fetchContest = async () => {
+			try {
+				const response = await axios.get(
+					`${import.meta.env.VITE_FRAME_URL}/api/contest/${id}`,
+				);
+				setContest(response.data);
+				setCampaignContractAddress(response.data.campaignAddress);
+				console.log(
+					"contest campaign address ======>>>>>>>>>",
+					response.data.campaignAddress,
+				);
+			} catch (error) {
+				console.error("Error fetching contest:", error);
+			}
+		};
+
+		fetchContest();
+	}, [id]); // Fetch contest data when the ID parameter changes
+
+	useEffect(() => {
+		const fetchSubmissions = async () => {
+			if (!campaignContractAddress) return; // Avoid fetching if the address is not set yet
+
+			try {
+				console.log("from fetch submission", campaignContractAddress);
+
+				const response1 = await axios.get(
+					`${import.meta.env.VITE_BACKEND_URL
+					}/contest-submission/${campaignContractAddress}`,
+				);
+				setSubmissions(response1.data);
+				console.log("submission data =====>>>>", response1.data);
+			} catch (error) {
+				console.error("Error fetching submissions:", error);
+			}
+		};
+
+		const fetchWinners = async () => {
+			if (!campaignContractAddress) return; // Avoid fetching if the address is not set yet
+
+			try {
+				const response2 = await axios.get(
+					`${import.meta.env.VITE_BACKEND_URL
+					}/winners-announced/${campaignContractAddress}`,
+				);
+				console.log("winners fetched: ", response2.data);
+				setWinners(response2.data);
+			} catch (error) {
+				console.error("Error fetching winners:", error);
+			}
+		};
+
+		if (campaignContractAddress) {
+			fetchSubmissions();
+			fetchWinners();
 		}
-	};
-
-	fetchContest();
-}, [id]); // Fetch contest data when the ID parameter changes
-
-useEffect(() => {
-	const fetchSubmissions = async () => {
-		if (!campaignContractAddress) return; // Avoid fetching if the address is not set yet
-
-		try {
-			console.log("from fetch submission", campaignContractAddress);
-
-			const response1 = await axios.get(
-				`${
-					import.meta.env.VITE_BACKEND_URL
-				}/contest-submission/${campaignContractAddress}`,
-			);
-			setSubmissions(response1.data);
-			console.log("submission data =====>>>>", response1.data);
-		} catch (error) {
-			console.error("Error fetching submissions:", error);
-		}
-	};
-
-	const fetchWinners = async () => {
-		if (!campaignContractAddress) return; // Avoid fetching if the address is not set yet
-
-		try {
-			const response2 = await axios.get(
-				`${
-					import.meta.env.VITE_BACKEND_URL
-				}/winners-announced/${campaignContractAddress}`,
-			);
-			console.log("winners fetched: ", response2.data);
-			setWinners(response2.data);
-		} catch (error) {
-			console.error("Error fetching winners:", error);
-		}
-	};
-
-	if (campaignContractAddress) {
-		fetchSubmissions();
-		fetchWinners();
-	}
-}, [campaignContractAddress]);
+	}, [campaignContractAddress]);
 
 	// useEffect(() => {
 	// 	const fetchContest = async () => {
@@ -112,7 +113,7 @@ useEffect(() => {
 	// 				`${import.meta.env.VITE_FRAME_URL}/api/contest/${id}`,
 	// 			);
 	// 			setContest( response.data );
-				
+
 	// 			setCampaignContractAddress(response.data.campaignAddress);
 	// 			console.log(
 	// 				"contest campaign address ======>>>>>>>>>",
@@ -120,7 +121,7 @@ useEffect(() => {
 	// 			);
 	// 		} catch (error) {
 	// 			console.error("Error fetching contest:", error);
-			
+
 	// 		}
 	// 	};
 
@@ -144,7 +145,7 @@ useEffect(() => {
 	// 				console.error("Error fetching submissions:", error);
 	// 			}
 	// 	};
-		
+
 	// 	const fetchWinners = async () => {
 	// 		try {
 	// 			const response2 = await axios.get(
@@ -159,7 +160,7 @@ useEffect(() => {
 	// 		}
 	// 	};
 
-		
+
 	// 	fetchContest();
 	// 	fetchSubmissions()
 	// 	fetchWinners();
@@ -185,7 +186,7 @@ useEffect(() => {
 		console.log("campaign submissionId =>>>>>>>", submissionId);
 		try {
 			const result = await campaign.upvoteSubmission(userAddress, submissionId);
-			console.log( "UpVote Method call result:", result );
+			console.log("UpVote Method call result:", result);
 			toast.success("You have voted successful..!");
 
 		} catch (error) {
@@ -217,23 +218,21 @@ useEffect(() => {
 			console.error("Error calling method:", error);
 		}
 	};
-	const selectWinnersContractCall = async () =>
-	{
-		
+	const selectWinnersContractCall = async () => {
+
 		const payoutAmount = ethers.utils.parseEther(payOut.toString()).toString();
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
 		const campaignContractAddress = contest.campaignAddress;
-		console.log("campaing address===>>>>>>>",campaignContractAddress)
+		console.log("campaing address===>>>>>>>", campaignContractAddress)
 		const campaign = new ethers.Contract(
 			campaignContractAddress,
 			CampaignAbi,
 			signer,
 		);
-		try
-		{
+		try {
 
-			console.log( "winner array ===>>>>>>> ", winnersArray );
+			console.log("winner array ===>>>>>>> ", winnersArray);
 			console.log("winner payot===>>>>>>> ", [payoutAmount.toString()]);
 			const result = await campaign.selectWinners(winnersArray, [
 				payoutAmount.toString(),
@@ -274,26 +273,31 @@ useEffect(() => {
 				></motion.div>
 			</Header>
 
-			<div style={boxStyle} className="rounded-box">
+			<div style={boxStyle} className="rounded-box" >
 				<div
 					style={{
 						display: "flex",
+						flexDirection: "row",
+						gap: "4rem",
 						margin: "20px",
-						justifyContent: "space-between",
+						justifyContent: "center",
 					}}
 				>
-					<div style={{ width: "500px" }}>
-						<h2 style={{}}>{contest.title}</h2>
+					<div style={{ width: "400px", display: "flex", flexDirection: "column", justifyContent: "center" }} >
+
 						<img
 							style={{
 								marginTop: "10px",
 								marginBottom: "10px",
-								borderRadius: "10px",
-								width: "400px",
+								borderRadius: "20px",
+								// width: "300px",
+								// width:"100%",
+								height: "350px"
 							}}
 							src={contest.imageUrl}
 							alt={contest.title}
 						/>
+						<h2 style={{marginBottom:"10px"}}>{contest.title}</h2>
 						<p style={{ textAlign: "justify" }}>
 							<b> Description : </b>
 							{contest.description}
@@ -303,8 +307,8 @@ useEffect(() => {
 							the final copy is available.
 						</p>
 					</div>
-					<hr style={{ color: "yellow" }} />
-					<div>
+					{/* <hr style={{ color: "yellow" }} /> */}
+					<div style={{ width: "400px" }}>
 						<div style={{ marginTop: "10px" }}>
 							<h2>Schedule</h2>
 							<p style={{ marginTop: "10px" }}>
@@ -312,17 +316,19 @@ useEffect(() => {
 								{new Date(parseInt(contest.startedAt)).toLocaleString()}
 							</p>
 							<p>
-								<b>Started At:</b>{" "}
+								<b>Ended At:</b>{" "}
 								{new Date(parseInt(contest.endedAt)).toLocaleString()}
 							</p>
 						</div>
-						<div style={{ marginTop: "20px" }}>
-							<Link to={`/participate/${contest._id}`} key={contest._id}>
-								<button className="btn btn-primary">Participate</button>
-							</Link>{" "}
-							<button className="btn btn-secondary" type="submit">
-								<b> Cast Now</b>
-							</button>
+						<div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
+							<div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+								<Link to={`/participate/${contest._id}`} key={contest._id}>
+									<button className="btn btn-primary">Participate</button>
+								</Link>{" "}
+								<button className="btn btn-secondary" type="submit">
+									<b> Cast Now</b>
+								</button>
+							</div>
 							<h2 style={{ marginTop: "20px" }}>Winners</h2>
 							{/* {winners.map((winner) => (
 								<p style={{ marginTop: "10px" }}>
@@ -339,13 +345,14 @@ useEffect(() => {
 							) : (
 								<p>No winners announced yet</p>
 							)}
-							
+
 							<button
 								style={{
 									marginTop: "20px",
+									marginBottom: "20px",
 									width: "100%",
 									background: "black",
-									color: "white",
+									color: "white"
 								}}
 								className="btn btn-light"
 								onClick={claimCall}
@@ -356,19 +363,34 @@ useEffect(() => {
 								placeholder="type submission id saperate by comma"
 								type="text"
 								onChange={(e) => setWinnersArray(e.target.value.split(","))}
+								style={{
+									padding: "10px 10px", border: "1px solid hsla(279, 6%, 55%, 0.5)",
+									border: "1px solid #ffcf4b",
+									borderRadius: "5px",
+									cursor: "pointer",
+									width: "100%"
+								}}
 							/>
 							<br />
 							<input
 								placeholder="type payout saperate by comma"
 								type="text"
 								onChange={(e) => setPayout(e.target.value.split(","))}
+								style={{
+									padding: "10px 10px", border: "1px solid hsla(279, 6%, 55%, 0.5)",
+									border: "1px solid #ffcf4b",
+									borderRadius: "5px",
+									cursor: "pointer",
+									width: "100%",
+									marginBottom: "24px"
+								}}
 							/>
 							<button
 								style={{
 									marginTop: "20px",
 									width: "100%",
 									background: "#FFD960",
-									color: "black",
+									color: "black"
 								}}
 								onClick={selectWinnersContractCall}
 								className="btn btn-primary"
@@ -379,6 +401,10 @@ useEffect(() => {
 					</div>
 				</div>
 
+
+				<div style={{ margin: "10px" }} className="contest-details"></div>
+			</div>
+			<div style={boxStyle} className="rounded-box">
 				<div>
 					<h2 style={{ marginTop: "40px", marginBottom: "20px" }}>
 						Participants
@@ -389,7 +415,7 @@ useEffect(() => {
 								to={`/contest-submission/${submission.submissionId}`}
 								key={submission.submissionId}
 							>
-								<div style={{ textAlign: "center" }}>
+								<div style={{ textAlign: "center"}}>
 									<img
 										style={{ textAlign: "center", borderRadius: "5px" }}
 										width={"100%"}
@@ -414,11 +440,11 @@ useEffect(() => {
 										flexDirection: "column",
 										marginTop: "10px",
 										fontSize: "10px",
-										justifyContent: "space-around",
+										justifyContent: "space-around"
 									}}
 								>
 									<a
-										style={{ width: "100%" }}
+										style={{ width: "100%", fontSize: "12px"}}
 										className="btn btn-primary highlight"
 									>
 										<b>
@@ -427,7 +453,7 @@ useEffect(() => {
 										</b>
 									</a>
 									<a
-										style={{ width: "100%", marginTop: "10px" }}
+										style={{ width: "100%", marginTop: "10px",fontSize: "12px" }}
 										className="btn btn-primary highlight"
 										onClick={() =>
 											upvoteContractCall(
@@ -445,8 +471,6 @@ useEffect(() => {
 						</GradientBorderCard>
 					))}
 				</div>
-
-				<div style={{ margin: "10px" }} className="contest-details"></div>
 			</div>
 		</Container>
 	);

@@ -134,7 +134,7 @@ export default function Home() {
 
 	return (
 		<Container className="hero">
-			<div style={{ display: "flex" }}>
+			<div style={{ display: "flex",gap:"4rem"}}>
 				<div>
 					<ContentContainer>
 						<Content
@@ -188,6 +188,7 @@ export default function Home() {
 								transition={{ duration: 0.6 }}
 								style={{
 									width: "100%",
+									textAlign : "center"
 								}}
 							>
 								Welcome to Memester Your Ultimate Destination for Memes
@@ -206,9 +207,9 @@ export default function Home() {
 								transition={{ duration: 0.6 }}
 							>
 								<img
-									// style={{
-									// 	margin: "-165px",
-									// }}
+									style={{
+										margin: "-50px",
+									}}
 									src="/images/finalbg.png"
 									width={800}
 								/>
