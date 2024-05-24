@@ -51,7 +51,7 @@ function Meme() {
 					animate="visible"
 					transition={{ duration: 0.6 }}
 				>
-					{/* <h2 className="">{meme.title}</h2> */}
+					<h2 className="">{meme.title}</h2>
 					<div className="meme-detail">
 						<h2>{meme.title}</h2>
 						<img

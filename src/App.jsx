@@ -34,6 +34,9 @@ import CreateContest from "./pages/CreateContest";
 import ContestList from "./pages/ContestList";
 import Contest from "./pages/ContestSingle";
 import MyContestList from "./pages/MyContestList";
+import Profile from "./pages/Profile";
+
+
 
 
 
@@ -77,7 +80,9 @@ function App() {
 						<Route path="create-contest" element={<CreateContest />} />
 						<Route path="contest-list" element={<ContestList />} />
 						<Route path="/contest/:id" element={<Contest />} />
-						<Route path="/meme/:id" element={<Meme />} />
+						<Route path="/profile" element={<Profile/>} />
+						{/* <Route path="/meme/:id" element={<Meme />} /> */}
+						<Route path="/meme" element={<Meme />} />
 						<Route path="/mycontest/:id" element={<MyContestList />} />
 
 						<Route path="/participate/:contestId" element={<Create />} />
@@ -92,6 +97,7 @@ function App() {
 				</Router>
 			</div>
 		</ThemeProvider>
+		
 	);
 }
 

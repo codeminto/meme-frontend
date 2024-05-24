@@ -7,6 +7,7 @@ export const Container = styled.section`
 	background-attachment: fixed;
 	background-size: cover;
 	padding:1rem;
+	min-height: 650px;
 `;
 
 export const Header = styled.div`

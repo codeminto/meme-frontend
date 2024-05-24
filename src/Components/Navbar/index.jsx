@@ -227,7 +227,7 @@ function Navbar() {
 						height="40px"
 						loading="eager"
 					/>
-					<span className="hidden">Memester</span>
+					<span>Memester</span>
 				</a>
 				<NavContainer>
 					<ul className="nav-menu">
@@ -244,6 +244,26 @@ function Navbar() {
 						</li>
 
 						<li>
+							<Link
+								to={`/contest-list`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>All Contests</b>
+							</Link>
+						</li>
+
+						<li>
+							<Link
+								to={`/create-contest`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>Create Contest</b>
+							</Link>
+						</li>
+
+						{/* <li>
 							<span className="btn btn-light nav-links" onClick={toggleSubMenu}>
 								<b>Contest </b>
 								<i
@@ -276,7 +296,7 @@ function Navbar() {
 									</SubMenuItem>
 								</SubMenu>
 							)}
-						</li>
+						</li> */}
 
 						<li>
 							<Link
@@ -293,10 +313,18 @@ function Navbar() {
 								className="btn btn-light nav-links"
 								onClick={closeMobileMenu}
 							>
-								<b>My Memes List</b>
+								<b>Memes</b>
 							</Link>
 						</li>
-						
+						<li>
+							<Link
+								to={'/profile'}
+								className="btn btn-light nav-links"
+							>
+								<b>Profile</b>
+							</Link>
+						</li>
+
 					</ul>
 					{ready && authenticated ? (
 						<a

@@ -11,6 +11,7 @@ import Loader from "./Components/Loader";
 import { LoaderProvider } from "./contexts/LoaderContext";
 // Replace this with any of the networks listed at https://viem.sh/docs/clients/chains.html
 import { opBNBTestnet, bscTestnet } from 'viem/chains';
+import {NextUIProvider} from '@nextui-org/react'
 // import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 // const client = new ApolloClient({
@@ -39,6 +40,7 @@ const ScrollSepolia = {
 
 ReactDOM.render(
 	<React.StrictMode>
+		<NextUIProvider>
 		<LoaderProvider>
 			<Toaster />
 			<Loader />
@@ -70,6 +72,7 @@ ReactDOM.render(
 				</Provider>
 			</PrivyProvider>
 		</LoaderProvider>
+		</NextUIProvider>
 		{/* </ApolloProvider> */}
 	</React.StrictMode>,
 	document.getElementById("root"),

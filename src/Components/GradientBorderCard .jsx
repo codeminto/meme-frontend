@@ -7,8 +7,7 @@ const GradientBorderCard = ({ children }) => {
 		borderRadius: "20px",
 		backgroundColor: "white",
 		margin: "5px",
-		overflow: "hidden",
-		
+		overflow: "hidden"
 	};
 
 	const containerStyle = {
