@@ -43,6 +43,19 @@ import { providers } from "ethers";
 import { ethers } from "ethers";
 import CampaignAbi from "../../abi/Campaign.json";
 
+const boxStyle = {
+	width: "100%",
+	borderRadius: "10px",
+	boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+	// paddingBottom: "20px",
+	backgroundColor: "#ffffff",
+	padding: "10px 30px 10px 20px",
+	marginTop: "4rem",
+	margin: "0 auto",
+	display: "flex",
+	gap: "2rem",
+};
+
 const client = new ApolloClient({
 	uri: import.meta.env.VITE_GRAPHQL_CLIENT,
 	cache: new InMemoryCache(),
@@ -191,9 +204,8 @@ export default function Create() {
 				const hash = await uploadToPinata(blob); // Call the function to upload blob to Pinata and get the hash
 				console.log("hash=====>>>", hash);
 				if (hash && hash?.length) {
-					const imagelink = await `https://${
-						import.meta.env.VITE_GATEWAY_URL
-					}/ipfs/${hash}`;
+					const imagelink = await `https://${import.meta.env.VITE_GATEWAY_URL
+						}/ipfs/${hash}`;
 
 					// Update formData with imagelink
 					setFormData({
@@ -553,166 +565,182 @@ export default function Create() {
 	};
 
 	return (
-		<Container>
-			{/*  */}
-			{contest?.title ? (
-				<>
-					<h2
-						style={{
-							textAlign: "center",
-							marginTop: "10px",
-						}}
-					>
-						You are now participating in {contest.title}
-					</h2>
-					<p
-						style={{
-							textAlign: "center",
-							marginBottom: "20px",
-						}}
-					>
-						Create your meme and submit now
-					</p>
-				</>
-			) : (
-				" "
-			)}
-			{/* <h2 style={{}}>You are participating in {contest.title}</h2> */}
-			<Flex>
-				{/* Editing View */}
-				<div className="editContainer">
-					<img
-						style={{ borderRadius: "5px" }}
-						src="."
-						alt="off-screen"
-						hidden
-						ref={offScreenImage}
-					/>
-					<EditView
-						ref={imageContainer}
-						className="editorView"
-						style={{
-							backgroundImage: `url(${memeTemplateView})`,
-							height: "290px",
-							borderRadius: "0.2rem",
-						}}
-					></EditView>
-					<div style={{ display: "flex", justifyContent: "center" }}>
-						<input
-							className="text btn btn-light"
-							type="text"
-							name="title"
-							placeholder="Write your meme Title here"
-							value={formData.title}
-							onChange={handleChange}
+		<>
+			<Container>
+				<div style={boxStyle}>
+					<img src={contest.imageUrl} alt="profile" style={{ height: "250px" , width:"300px"}} className="rounded-lg"></img>
+					<div className="flex flex-col">
+						<h2 style={{ marginBottom: "10px" }} className="text-2xl font-semibold mt-4">{contest.title}</h2>
+						<p style={{ textAlign: "justify" }}>
+							<b> Description : </b>
+							{contest.description}
+							In publishing and graphic design, a placeholder text commonly used
+							to demonstrate the visual form of a document or a typeface without
+							relying on meaningful content. may be used as a placeholder before
+							the final copy is available.
+						</p>
+
+						<p className="mt-5 font-medium">
+							Create your meme and submit now
+						</p>
+						{/* {contest?.title ? (
+						<>
+						<h1 style={{ textAlign: "center", marginTop: "10px"}} className="text-2xl font-semibold">
+							You are now participating in {contest.title}
+						</h1>
+						<p
 							style={{
-								width: "100%",
-								marginTop: "20px",
-								height: "35px",
-								border: "1px solid #E5E7EB",
-								padding: "15px",
+								marginBottom: "20px",
 							}}
+						>
+							Create your meme and submit now
+						</p>
+						</>
+					) : (
+					" "
+					)} */}
+					</div>
+				</div>
+			</Container>
+
+			<Container style={{marginTop:"10px"}}>
+				{/*  */}
+
+				{/* <h2 style={{}}>You are participating in {contest.title}</h2> */}
+				<Flex>
+					{/* Editing View */}
+					<div className="editContainer">
+						<img
+							style={{ borderRadius: "5px" }}
+							src="."
+							alt="off-screen"
+							hidden
+							ref={offScreenImage}
 						/>
-						{/* <input
+						<EditView
+							ref={imageContainer}
+							className="editorView"
+							style={{
+								backgroundImage: `url(${memeTemplateView})`,
+								height: "290px",
+								borderRadius: "0.2rem",
+							}}
+						></EditView>
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<input
+								className="text btn btn-light"
+								type="text"
+								name="title"
+								placeholder="Write your meme Title here"
+								value={formData.title}
+								onChange={handleChange}
+								style={{
+									width: "100%",
+									marginTop: "20px",
+									height: "35px",
+									border: "1px solid #E5E7EB",
+									padding: "15px",
+								}}
+							/>
+							{/* <input
 							type="text"
 							name="userId"
 							placeholder="User ID"
 							value={formData.userId}
 							onChange={handleChange}
 						/> */}
-					</div>
-					<Actions>
-						<ActionButton
-							style={{ backgroundColor: "black", color: "white" }}
-							className="btn"
-							onClick={downloadMeme}
-						>
-							Download <i className="fas fa-cloud-arrow-down"></i>
-						</ActionButton>
-						{/* <ActionButton
+						</div>
+						<Actions>
+							<ActionButton
+								style={{ backgroundColor: "black", color: "white" }}
+								className="btn"
+								onClick={downloadMeme}
+							>
+								Download <i className="fas fa-cloud-arrow-down"></i>
+							</ActionButton>
+							{/* <ActionButton
 							style={{ backgroundColor: "green", color: "white" }}
 							className="btn btn-tertiary"
 							onClick={handleSubmit}
 						>
 							Save <i className="fas fa-save"></i>
 						</ActionButton> */}
-						<ActionButton
-							style={{ backgroundColor: "green", color: "white" }}
-							className="btn btn-tertiary"
-							onClick={saveMeme}
-						>
-							Save <i className="fas fa-save"></i>
-						</ActionButton>
-
-						<ActionButton className="btn btn-primary">
-							<a
-								target="_blank"
-								href={`https://warpcast.com/~/compose?embeds[]=${
-									import.meta.env.VITE_FRAME_URL
-								}/api/frame/${FrameID}`}
-								// style={{  color: "white" }}
-							>
-								<b> Cast</b> <i className="fas fa-share-from-square"></i>
-							</a>{" "}
-						</ActionButton>
-					</Actions>
-					<Actions>
-						{contest?.title ? (
 							<ActionButton
-								style={{ width: "100%" }}
-								className="btn btn-primary"
-								onClick={handleuUploadSubmission}
+								style={{ backgroundColor: "green", color: "white" }}
+								className="btn btn-tertiary"
+								onClick={saveMeme}
 							>
-								<b> Submit to Participate</b>
+								Save <i className="fas fa-save"></i>
 							</ActionButton>
-						) : (
-							" "
-						)}
-					</Actions>
-				</div>
 
-				{/* Editing Controls */}
-				<Controls>
-					<Actions>
-						<ActionButton className="btn btn-light" onClick={AddTextToCanvas}>
-							Add Text <i className="fas fa-text-height"></i>
-						</ActionButton>
-						<ActionButton className="btn btn-light" onClick={AddImageToCanvas}>
-							Add Image <i className="fas fa-image"></i>
-						</ActionButton>
-					</Actions>
-
-					<div className="text">
-						<textarea
-							type="text"
-							onChange={textFunctions.changeText}
-							value={currentText}
-							placeholder="Click on add to text and write your text here .."
-						/>
+							<ActionButton className="btn btn-primary">
+								<a
+									target="_blank"
+									href={`https://warpcast.com/~/compose?embeds[]=${import.meta.env.VITE_FRAME_URL
+										}/api/frame/${FrameID}`}
+								// style={{  color: "white" }}
+								>
+									<b> Cast</b> <i className="fas fa-share-from-square"></i>
+								</a>{" "}
+							</ActionButton>
+						</Actions>
+						<Actions>
+							{contest?.title ? (
+								<ActionButton
+									style={{ width: "100%" }}
+									className="btn btn-primary"
+									onClick={handleuUploadSubmission}
+								>
+									<b> Submit to Participate</b>
+								</ActionButton>
+							) : (
+								" "
+							)}
+						</Actions>
 					</div>
-					<div
-						style={{
-							borderRadius: "0.5rem",
 
-							border: "1px solid #E5E7EB",
-							marginBottom: "10px",
-						}}
-					>
-						<HomeCategory>
-							<div className="categoryHeader">
-								<h2>Meme Templates</h2>
-								<div className="categoryOptions">
-									<select className="category" name="category" id="category">
-										<option defaultValue="Latest">Latest</option>
-										<option defaultValue="Trending">Trending</option>
-										<option defaultValue="Downloads">Downloads</option>
-									</select>
+					{/* Editing Controls */}
+					<Controls>
+						<Actions>
+							<ActionButton className="btn btn-light" onClick={AddTextToCanvas}>
+								Add Text <i className="fas fa-text-height"></i>
+							</ActionButton>
+							<ActionButton className="btn btn-light" onClick={AddImageToCanvas}>
+								Add Image <i className="fas fa-image"></i>
+							</ActionButton>
+						</Actions>
+
+						<div className="text">
+							<textarea
+								type="text"
+								onChange={textFunctions.changeText}
+								value={currentText}
+								placeholder="Click on add to text and write your text here .."
+							/>
+						</div>
+						<div
+							style={{
+								borderRadius: "0.5rem",
+
+								border: "1px solid #E5E7EB",
+								marginBottom: "10px",
+							}}
+						>
+							<HomeCategory>
+								<div className="categoryHeader">
+									<h2>Meme Templates</h2>
+									<div className="categoryOptions">
+										<select className="category" name="category" id="category">
+											<option defaultValue="Latest">Latest</option>
+											<option defaultValue="Trending">Trending</option>
+											<option defaultValue="Downloads">Downloads</option>
+										</select>
+									</div>
 								</div>
-							</div>
 
-							{/* Meme Templates */}
-							<div className="memeTemplates">
-								{/* {memeTemplates.map((i) => (
+								{/* Meme Templates */}
+								<div className="memeTemplates">
+									{/* {memeTemplates.map((i) => (
 						<div className="card" key={i.id} onClick={useTemplate}>
 							<LazyLoadImage
 								src={i.image_link}
@@ -722,192 +750,193 @@ export default function Create() {
 							<h3 className="tag">{i.title}</h3>
 						</div>
 					))} */}
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp1}
-										alt="Memster Template"
-										effect="blur"
-									/>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp1}
+											alt="Memster Template"
+											effect="blur"
+										/>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp2}
+											alt="Memster Template"
+											effect="blur"
+										/>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp3}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Distracted Boyfriend</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp4}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Two Buttons</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp5}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Finding Neverland</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp6}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Woman Yelling At Cat</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp7}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Leonardo Dicaprio Cheers</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp8}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Charlie Conspiracy</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp9}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">I am once again asking</h3>
+									</div>
+									<div className="card" onClick={useTemplate}>
+										<LazyLoadImage
+											src={temp10}
+											alt="Memster Template"
+											effect="blur"
+										/>
+										<h3 className="tag">Drake Hotline Bling</h3>
+									</div>
 								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp2}
-										alt="Memster Template"
-										effect="blur"
-									/>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp3}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Distracted Boyfriend</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp4}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Two Buttons</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp5}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Finding Neverland</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp6}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Woman Yelling At Cat</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp7}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Leonardo Dicaprio Cheers</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp8}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Charlie Conspiracy</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp9}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">I am once again asking</h3>
-								</div>
-								<div className="card" onClick={useTemplate}>
-									<LazyLoadImage
-										src={temp10}
-										alt="Memster Template"
-										effect="blur"
-									/>
-									<h3 className="tag">Drake Hotline Bling</h3>
-								</div>
-							</div>
-						</HomeCategory>
-					</div>
+							</HomeCategory>
+						</div>
 
-					{/* Font Size */}
-					<div
-						style={{
-							borderRadius: "0.5rem",
-							padding: "1rem",
-							border: "1px solid #E5E7EB",
-							marginBottom: "10px",
-						}}
-					>
-						<div className="formatting">
-							{/* Bold, Italics, and Underline */}
-							<div className="styling">
-								<p>Font Style:</p>
+						{/* Font Size */}
+						<div
+							style={{
+								borderRadius: "0.5rem",
+								padding: "1rem",
+								border: "1px solid #E5E7EB",
+								marginBottom: "10px",
+							}}
+						>
+							<div className="formatting">
+								{/* Bold, Italics, and Underline */}
+								<div className="styling">
+									<p>Font Style:</p>
+									<div>
+										<button className="bold" onClick={textFunctions.toggleBold}>
+											B
+										</button>
+										<button
+											className="italic"
+											onClick={textFunctions.toggleItalics}
+										>
+											I
+										</button>
+										<button
+											className="underline"
+											onClick={textFunctions.toggleUnderline}
+										>
+											U
+										</button>
+									</div>
+								</div>
+
 								<div>
-									<button className="bold" onClick={textFunctions.toggleBold}>
-										B
-									</button>
-									<button
-										className="italic"
-										onClick={textFunctions.toggleItalics}
-									>
-										I
-									</button>
-									<button
-										className="underline"
-										onClick={textFunctions.toggleUnderline}
-									>
-										U
-									</button>
+									<p>Font size:</p>
+									<input
+										type="text"
+										defaultValue={16}
+										maxLength={3}
+										onChange={textFunctions.changeTextSize}
+									/>
 								</div>
-							</div>
 
-							<div>
-								<p>Font size:</p>
-								<input
-									type="text"
-									defaultValue={16}
-									maxLength={3}
-									onChange={textFunctions.changeTextSize}
-								/>
-							</div>
-
-							<div>
-								<p>Font color:</p>
-								<input
-									type="color"
-									defaultValue="#ffffff"
-									onChange={textFunctions.changeTextColor}
-								></input>
-							</div>
-						</div>
-						<div className="formatting">
-							{/* Text alignment */}
-							<div className="styling">
-								<p>Text alignment:</p>
 								<div>
-									<button
-										className="leftAlign"
-										onClick={textFunctions.justify}
-										data-justification="left"
-									>
-										<i className="fas fa-align-left"></i>
-									</button>
-									<button
-										className="midAlign"
-										onClick={textFunctions.justify}
-										data-justification="center"
-									>
-										<i className="fas fa-align-center"></i>
-									</button>
-									<button
-										className="rightAlign"
-										onClick={textFunctions.justify}
-										data-justification="right"
-									>
-										<i className="fas fa-align-right"></i>
-									</button>
+									<p>Font color:</p>
+									<input
+										type="color"
+										defaultValue="#ffffff"
+										onChange={textFunctions.changeTextColor}
+									></input>
 								</div>
 							</div>
+							<div className="formatting">
+								{/* Text alignment */}
+								<div className="styling">
+									<p>Text alignment:</p>
+									<div>
+										<button
+											className="leftAlign"
+											onClick={textFunctions.justify}
+											data-justification="left"
+										>
+											<i className="fas fa-align-left"></i>
+										</button>
+										<button
+											className="midAlign"
+											onClick={textFunctions.justify}
+											data-justification="center"
+										>
+											<i className="fas fa-align-center"></i>
+										</button>
+										<button
+											className="rightAlign"
+											onClick={textFunctions.justify}
+											data-justification="right"
+										>
+											<i className="fas fa-align-right"></i>
+										</button>
+									</div>
+								</div>
 
-							{/* Stroke */}
-							<div>
-								<p>Stroke width:</p>
-								<div className="inputStroke">
-									<input type="text" defaultValue="0" />
+								{/* Stroke */}
+								<div>
+									<p>Stroke width:</p>
+									<div className="inputStroke">
+										<input type="text" defaultValue="0" />
+									</div>
+								</div>
+
+								<div>
+									<p>Stroke color:</p>
+									<div className="inputStroke">
+										<input type="color" defaultValue="#000000" />
+									</div>
 								</div>
 							</div>
-
-							<div>
-								<p>Stroke color:</p>
-								<div className="inputStroke">
-									<input type="color" defaultValue="#000000" />
-								</div>
+							<div style={{ marginLeft: "5px", marginTop: "10px" }}>
+								<ActionButton className="btn delete" onClick={deleteSelected}>
+									Delete <i className="fas fa-delete-from-square"></i>
+								</ActionButton>
 							</div>
 						</div>
-						<div style={{ marginLeft: "5px", marginTop: "10px" }}>
-							<ActionButton className="btn delete" onClick={deleteSelected}>
-								Delete <i className="fas fa-delete-from-square"></i>
-							</ActionButton>
-						</div>
-					</div>
-				</Controls>
-			</Flex>
-			<FileButtons></FileButtons>
-		</Container>
+					</Controls>
+				</Flex>
+				<FileButtons></FileButtons>
+			</Container>
+		</>
 	);
 }
