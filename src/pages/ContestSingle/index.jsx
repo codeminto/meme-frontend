@@ -20,13 +20,12 @@ const boxStyle = {
 	boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
 	padding: "20px",
 	backgroundColor: "#ffffff",
-	marginTop:"24px"
+	marginTop: "24px",
 	// display : "flex",
 	// flexDirection: "column",
 	// justifyContent: "center"
 };
 function Contest() {
-
 	const [contest, setContest] = useState(null);
 	const [submissions, setSubmissions] = useState([]);
 	const [winners, setWinners] = useState([]);
@@ -39,13 +38,12 @@ function Contest() {
 	const networkID = wallet ? wallet.chainId?.split(":")[1] : null;
 	const userAddress = user ? user.wallet?.address : null;
 
-	const [winnersArray, setWinnersArray] = useState([])
-	const [payOut, setPayout] = useState([])
+	const [winnersArray, setWinnersArray] = useState([]);
+	const [payOut, setPayout] = useState([]);
 	const fadeTop = {
 		hidden: { opacity: 0, y: -30 },
 		visible: { opacity: 1, y: 0 },
 	};
-
 
 	useEffect(() => {
 		const fetchContest = async () => {
@@ -75,7 +73,8 @@ function Contest() {
 				console.log("from fetch submission", campaignContractAddress);
 
 				const response1 = await axios.get(
-					`${import.meta.env.VITE_BACKEND_URL
+					`${
+						import.meta.env.VITE_BACKEND_URL
 					}/contest-submission/${campaignContractAddress}`,
 				);
 				setSubmissions(response1.data);
@@ -90,7 +89,8 @@ function Contest() {
 
 			try {
 				const response2 = await axios.get(
-					`${import.meta.env.VITE_BACKEND_URL
+					`${
+						import.meta.env.VITE_BACKEND_URL
 					}/winners-announced/${campaignContractAddress}`,
 				);
 				console.log("winners fetched: ", response2.data);
@@ -124,7 +124,6 @@ function Contest() {
 
 	// 		}
 	// 	};
-
 
 	// 	const fetchSubmissions = async () => {
 	// 			try
@@ -160,13 +159,10 @@ function Contest() {
 	// 		}
 	// 	};
 
-
 	// 	fetchContest();
 	// 	fetchSubmissions()
 	// 	fetchWinners();
 	// }, [id]); // Fetch data whenever the ID parameter changes
-
-
 
 	if (!contest) {
 		return <div>Contest not found</div>;
@@ -188,7 +184,6 @@ function Contest() {
 			const result = await campaign.upvoteSubmission(userAddress, submissionId);
 			console.log("UpVote Method call result:", result);
 			toast.success("You have voted successful..!");
-
 		} catch (error) {
 			console.error("Error calling method:", error);
 		}
@@ -219,24 +214,22 @@ function Contest() {
 		}
 	};
 	const selectWinnersContractCall = async () => {
-
 		const payoutAmount = ethers.utils.parseEther(payOut.toString()).toString();
 		const provider = new providers.Web3Provider(window.ethereum);
 		const signer = provider.getSigner();
 		const campaignContractAddress = contest.campaignAddress;
-		console.log("campaing address===>>>>>>>", campaignContractAddress)
+		console.log("campaing address===>>>>>>>", campaignContractAddress);
 		const campaign = new ethers.Contract(
 			campaignContractAddress,
 			CampaignAbi,
 			signer,
 		);
 		try {
-
 			console.log("winner array ===>>>>>>> ", winnersArray);
 			console.log("winner payot===>>>>>>> ", [payoutAmount.toString()]);
 			const result = await campaign.selectWinners(winnersArray, [
 				payoutAmount.toString(),
-			])
+			]);
 			console.log("Method call result:", result);
 		} catch (error) {
 			console.error("Error calling method:", error);
@@ -273,7 +266,7 @@ function Contest() {
 				></motion.div>
 			</Header>
 
-			<div style={boxStyle} className="rounded-box" >
+			<div style={boxStyle} className="rounded-box">
 				<div
 					style={{
 						display: "flex",
@@ -283,8 +276,14 @@ function Contest() {
 						justifyContent: "center",
 					}}
 				>
-					<div style={{ width: "400px", display: "flex", flexDirection: "column", justifyContent: "center" }} >
-
+					<div
+						style={{
+							width: "400px",
+							display: "flex",
+							flexDirection: "column",
+							justifyContent: "center",
+						}}
+					>
 						<img
 							style={{
 								marginTop: "10px",
@@ -292,12 +291,12 @@ function Contest() {
 								borderRadius: "20px",
 								// width: "300px",
 								// width:"100%",
-								height: "350px"
+								height: "350px",
 							}}
 							src={contest.imageUrl}
 							alt={contest.title}
 						/>
-						<h2 style={{marginBottom:"10px"}}>{contest.title}</h2>
+						<h2 style={{ marginBottom: "10px" }}>{contest.title}</h2>
 						<p style={{ textAlign: "justify" }}>
 							<b> Description : </b>
 							{contest.description}
@@ -320,8 +319,16 @@ function Contest() {
 								{new Date(parseInt(contest.endedAt)).toLocaleString()}
 							</p>
 						</div>
-						<div style={{ marginTop: "20px", display: "flex", flexDirection: "column" }}>
-							<div style={{ display: "flex", flexDirection: "row", gap: "1rem" }}>
+						<div
+							style={{
+								marginTop: "20px",
+								display: "flex",
+								flexDirection: "column",
+							}}
+						>
+							<div
+								style={{ display: "flex", flexDirection: "row", gap: "1rem" }}
+							>
 								<Link to={`/participate/${contest._id}`} key={contest._id}>
 									<button className="btn btn-primary">Participate</button>
 								</Link>{" "}
@@ -352,7 +359,7 @@ function Contest() {
 									marginBottom: "20px",
 									width: "100%",
 									background: "black",
-									color: "white"
+									color: "white",
 								}}
 								className="btn btn-light"
 								onClick={claimCall}
@@ -364,11 +371,12 @@ function Contest() {
 								type="text"
 								onChange={(e) => setWinnersArray(e.target.value.split(","))}
 								style={{
-									padding: "10px 10px", border: "1px solid hsla(279, 6%, 55%, 0.5)",
+									padding: "10px 10px",
+									border: "1px solid hsla(279, 6%, 55%, 0.5)",
 									border: "1px solid #ffcf4b",
 									borderRadius: "5px",
 									cursor: "pointer",
-									width: "100%"
+									width: "100%",
 								}}
 							/>
 							<br />
@@ -377,12 +385,13 @@ function Contest() {
 								type="text"
 								onChange={(e) => setPayout(e.target.value.split(","))}
 								style={{
-									padding: "10px 10px", border: "1px solid hsla(279, 6%, 55%, 0.5)",
+									padding: "10px 10px",
+									border: "1px solid hsla(279, 6%, 55%, 0.5)",
 									border: "1px solid #ffcf4b",
 									borderRadius: "5px",
 									cursor: "pointer",
 									width: "100%",
-									marginBottom: "24px"
+									marginBottom: "24px",
 								}}
 							/>
 							<button
@@ -390,7 +399,7 @@ function Contest() {
 									marginTop: "20px",
 									width: "100%",
 									background: "#FFD960",
-									color: "black"
+									color: "black",
 								}}
 								onClick={selectWinnersContractCall}
 								className="btn btn-primary"
@@ -400,7 +409,6 @@ function Contest() {
 						</div>
 					</div>
 				</div>
-
 
 				<div style={{ margin: "10px" }} className="contest-details"></div>
 			</div>
@@ -415,7 +423,7 @@ function Contest() {
 								to={`/contest-submission/${submission.submissionId}`}
 								key={submission.submissionId}
 							>
-								<div style={{ textAlign: "center"}}>
+								<div style={{ textAlign: "center" }}>
 									<img
 										style={{ textAlign: "center", borderRadius: "5px" }}
 										width={"100%"}
@@ -440,11 +448,11 @@ function Contest() {
 										flexDirection: "column",
 										marginTop: "10px",
 										fontSize: "10px",
-										justifyContent: "space-around"
+										justifyContent: "space-around",
 									}}
 								>
 									<a
-										style={{ width: "100%", fontSize: "12px"}}
+										style={{ width: "100%", fontSize: "12px" }}
 										className="btn btn-primary highlight"
 									>
 										<b>
@@ -453,7 +461,11 @@ function Contest() {
 										</b>
 									</a>
 									<a
-										style={{ width: "100%", marginTop: "10px",fontSize: "12px" }}
+										style={{
+											width: "100%",
+											marginTop: "10px",
+											fontSize: "12px",
+										}}
 										className="btn btn-primary highlight"
 										onClick={() =>
 											upvoteContractCall(
