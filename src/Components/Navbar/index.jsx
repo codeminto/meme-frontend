@@ -244,6 +244,35 @@ function Navbar() {
 						</li>
 
 						<li>
+							<Link
+								to={`/contest-list`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>Contests</b>
+							</Link>
+						</li>
+						<li>
+							<Link
+								 to={`/create-contest`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>Create Contests</b>
+							</Link>
+						</li>
+
+						<li>
+							<Link
+								to={`/create-meme`}
+								className="btn btn-light nav-links"
+								onClick={closeMobileMenu}
+							>
+								<b>Create Meme</b>
+							</Link>
+						</li>
+
+						{/* <li>
 							<span className="btn btn-light nav-links" onClick={toggleSubMenu}>
 								<b>Contest </b>
 								<i
@@ -253,6 +282,7 @@ function Navbar() {
 									style={{ marginLeft: "5px" }}
 								/>
 							</span>
+
 							{showSubMenu && (
 								<SubMenu>
 									<Link to={`/create-contest`} onClick={closeMobileMenu}>
@@ -276,25 +306,43 @@ function Navbar() {
 									</SubMenuItem>
 								</SubMenu>
 							)}
-						</li>
+						</li> */}
+
+						
 
 						<li>
-							<Link
-								to={`/create-meme`}
-								className="btn btn-light nav-links"
-								onClick={closeMobileMenu}
-							>
-								<b>Create Meme</b>
-							</Link>
-						</li>
-						<li>
-							<Link
-								to={`/mymemes`}
-								className="btn btn-light nav-links"
-								onClick={closeMobileMenu}
-							>
-								<b>My Memes List</b>
-							</Link>
+							<span className="btn btn-light nav-links" onClick={toggleSubMenu}>
+								<b>Profile</b>
+								<i
+									className={
+										showSubMenu ? "fas fa-chevron-up" : "fas fa-chevron-down"
+									}
+									style={{ marginLeft: "5px" }}
+								/>
+							</span>
+							{showSubMenu && (
+								<SubMenu>
+									<Link to={`my-contest`} onClick={closeMobileMenu}>
+										<SubMenuItem>
+											<b>My Contests</b>
+										</SubMenuItem>
+									</Link>
+
+									<SubMenuItem>
+										<Link to={`/submited-contest`} onClick={closeMobileMenu}>
+											<b>Submited Contests</b>
+										</Link>
+									</SubMenuItem>
+									<SubMenuItem>
+										<Link
+											to={`/mymemes`}
+											onClick={closeMobileMenu}
+										>
+											<b>My Memes</b>
+										</Link>
+									</SubMenuItem>
+								</SubMenu>
+							)}
 						</li>
 						
 					</ul>

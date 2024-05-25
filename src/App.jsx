@@ -34,6 +34,8 @@ import CreateContest from "./pages/CreateContest";
 import ContestList from "./pages/ContestList";
 import Contest from "./pages/ContestSingle";
 import MyContestList from "./pages/MyContestList";
+import MyContest from "./pages/MyContest";
+import SubmitedContest from "./pages/SubmitedContest";
 
 
 
@@ -87,6 +89,9 @@ function App() {
 						{/* <Route path="create" element={<Create />} /> */}
 						{/* <Route path="success" element={<Success />} /> */}
 						<Route path="*" element={<Error />} />
+
+						<Route path="my-contest" element={<MyContest />}></Route>
+						<Route path="submited-contest" element={<SubmitedContest />}></Route>
 					</Routes>
 					<Footer />
 				</Router>
