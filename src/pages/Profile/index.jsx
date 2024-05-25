@@ -30,13 +30,12 @@ export default function Profile() {
 		<Container>
 			<div style={boxStyle} >
 				<div style={{ marginBottom: "25px" }}>
-
 					<img src="/images/profile.jpg" alt='profile' className='w-full h-50px' style={{ height: "200px" }} >
 					</img>
 					<img src='/images/userphoto.png' style={{ width: "140px", height: "140px", marginTop: "-3rem", marginLeft: "2rem", display: "inline-block" }}></img>
 					<h1 className='text-4xl font-semibold ml-5' style={{ display: "inline-block" }}>User Name</h1>
 				</div>
-				
+
 			</div>
 		</Container>
 	)
