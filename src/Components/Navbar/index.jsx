@@ -316,13 +316,48 @@ function Navbar() {
 								<b>Memes</b>
 							</Link>
 						</li>
-						<li>
+						{/* <li>
 							<Link
 								to={'/profile'}
 								className="btn btn-light nav-links"
 							>
 								<b>Profile</b>
 							</Link>
+						</li> */}
+
+						<li>
+							<span className="btn btn-light nav-links" onClick={toggleSubMenu}>
+								<b>Profile </b>
+								<i
+									className={
+										showSubMenu ? "fas fa-chevron-up" : "fas fa-chevron-down"
+									}
+									style={{ marginLeft: "5px" }}
+								/>
+							</span>
+							{showSubMenu && (
+								<SubMenu>
+									<Link to={`/my-contest`} onClick={closeMobileMenu}>
+										<SubMenuItem>
+											<b>My Contests</b>
+										</SubMenuItem>
+									</Link>
+
+									<SubMenuItem>
+										<Link to={`/submited-contest`} onClick={closeMobileMenu}>
+											<b>Submited Contests</b>
+										</Link>
+									</SubMenuItem>
+									<SubMenuItem>
+										<Link
+											to={`/mymemes`}
+											onClick={closeMobileMenu}
+										>
+											<b>My MemesList</b>
+										</Link>
+									</SubMenuItem>
+								</SubMenu>
+							)}
 						</li>
 
 					</ul>

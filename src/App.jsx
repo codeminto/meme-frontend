@@ -35,7 +35,8 @@ import ContestList from "./pages/ContestList";
 import Contest from "./pages/ContestSingle";
 import MyContestList from "./pages/MyContestList";
 import Profile from "./pages/Profile";
-
+import Mycontest from "./pages/Mycontest";
+import SubmitedContest from "./pages/SubmitedContest";
 
 
 
@@ -76,7 +77,7 @@ function App() {
 							<Route path="comrade" element={<Comrade />} />
 						</Route> */}
 						<Route path="login" element={<Login />} />
-						<Route path="mymemes" element={<MyMemesList />} />
+						
 						<Route path="create-contest" element={<CreateContest />} />
 						<Route path="contest-list" element={<ContestList />} />
 						<Route path="/contest/:id" element={<Contest />} />
@@ -92,6 +93,11 @@ function App() {
 						{/* <Route path="create" element={<Create />} /> */}
 						{/* <Route path="success" element={<Success />} /> */}
 						<Route path="*" element={<Error />} />
+
+						<Route path="mymemes" element={<MyMemesList />} />
+						<Route path="my-contest" element={<Mycontest />} />
+						<Route path="submited-contest" element={<SubmitedContest />}></Route>
+
 					</Routes>
 					<Footer />
 				</Router>
