@@ -372,7 +372,7 @@ function Contest() {
 								onChange={(e) => setWinnersArray(e.target.value.split(","))}
 								style={{
 									padding: "10px 10px",
-									border: "1px solid hsla(279, 6%, 55%, 0.5)",
+									// border: "1px solid hsla(279, 6%, 55%, 0.5)",
 									border: "1px solid #ffcf4b",
 									borderRadius: "5px",
 									cursor: "pointer",
@@ -386,7 +386,7 @@ function Contest() {
 								onChange={(e) => setPayout(e.target.value.split(","))}
 								style={{
 									padding: "10px 10px",
-									border: "1px solid hsla(279, 6%, 55%, 0.5)",
+									// border: "1px solid hsla(279, 6%, 55%, 0.5)",
 									border: "1px solid #ffcf4b",
 									borderRadius: "5px",
 									cursor: "pointer",

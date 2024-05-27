@@ -1,5 +1,5 @@
 import React from 'react'
-import notfound from "../assets/images/notfound/nodata.png";
+import notfound from "../assets/images/notfound/no-data.jpg";
 
 export default function NoDataFound() {
     return (

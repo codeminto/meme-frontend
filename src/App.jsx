@@ -36,6 +36,7 @@ import Contest from "./pages/ContestSingle";
 import MyContestList from "./pages/MyContestList";
 import MyContest from "./pages/MyContest";
 import SubmitedContest from "./pages/SubmitedContest";
+import MyProfile from "./pages/MyProfile";
 
 
 
@@ -92,6 +93,7 @@ function App() {
 
 						<Route path="my-contest" element={<MyContest />}></Route>
 						<Route path="submited-contest" element={<SubmitedContest />}></Route>
+						<Route path="my-profile" element={<MyProfile />}></Route>
 					</Routes>
 					<Footer />
 				</Router>

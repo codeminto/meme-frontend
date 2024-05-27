@@ -341,6 +341,14 @@ function Navbar() {
 											<b>My Memes</b>
 										</Link>
 									</SubMenuItem>
+									<SubMenuItem>
+										<Link
+											to={`/my-profile`}
+											onClick={closeMobileMenu}
+										>
+											<b>My Profile</b>
+										</Link>
+									</SubMenuItem>
 								</SubMenu>
 							)}
 						</li>

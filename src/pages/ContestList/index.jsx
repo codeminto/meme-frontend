@@ -170,12 +170,10 @@ function ContestList() {
 											<img
 												style={{
 													textAlign: "center",
-													borderRadius: "10px",
 													objectFit: "contain",
 													borderRadius: "10px",
 													width: "132px",
 													height: "140px"
-
 												}}
 
 												width={"100%"}
