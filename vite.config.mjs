@@ -7,4 +7,9 @@ export default defineConfig({
 	define: {
 		global: "window",
 	},
+	optimizeDeps: {
+		disabled: false,
+		// NOTE: workaround,  react-cropper is my nest deps
+		include: ['dynamic-import-pkg > react-cropper'],
+	  }
 });

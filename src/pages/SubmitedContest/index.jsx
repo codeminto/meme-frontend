@@ -132,7 +132,7 @@ function SubmitedContest() {
 			</Header>
 			{!(!!contests?.length) && <NoDataFound />}
 			{(!!contests?.length) && (
-				<div style={boxStyle}>
+				<div>
 					{contests.map((contest) => (
 						<GradientBorderCard>
 							<div class="ongoing" style={{display:"flex", flexDirection: "row", justifyContent:"space-between"}}>

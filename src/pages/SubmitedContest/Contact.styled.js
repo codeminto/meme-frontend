@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 export const Container = styled.section`
 	margin: 4rem auto 0;
-	background-color: #fff68d;
-	background-image: var(--bg-primary);
+	// background-color: #fff68d;
+	// background-image: var(--bg-primary);
 	background-attachment: fixed;
 	background-size: cover;
 	padding:1rem;
-	min-height:700px;
+	// min-height:700px;
 `;
 
 export const Header = styled.div`

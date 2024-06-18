@@ -21,13 +21,16 @@ const GradientBorderCard = ({ children }) => {
 		marginRight: "10px",
 		display: "inline-block", // Display inline-block to put cards in a row
 		boxSizing: "border-box", // Ensure padding and border are included in width calculation
+
 	};
 
 	return (
 		<>
+		
 			<div style={containerStyle}>
 				<div style={cardStyle}>{children}</div>
 			</div>
+			
 		</>
 	);
 };

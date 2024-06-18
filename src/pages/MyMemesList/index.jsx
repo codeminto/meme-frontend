@@ -91,7 +91,7 @@ function MyMemesList ()
 			</Header>
 			{!!!memes?.length && <NoDataFound />}
 			{!!memes?.length && (
-				<div style={boxStyle} className="rounded-box">
+				<div className="rounded-box">
 					{memes.map((meme) => (
 						<GradientBorderCard>
 							<Link to={`/meme/${meme.f_id}`} key={meme.f_id}>
